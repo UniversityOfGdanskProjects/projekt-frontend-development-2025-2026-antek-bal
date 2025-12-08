@@ -30,7 +30,8 @@ const posts = [
         "media": "https://picsum.photos/300/200",
         "visibility": "friends",
         "date": "2025-02-14T09:22:00",
-        "likes": 3
+        "likes": 3,
+        "comments": []
     },
     {
         "id": 2,
@@ -39,7 +40,8 @@ const posts = [
         "media": null,
         "visibility": "private",
         "date": "2025-05-30T18:05:00",
-        "likes": 1
+        "likes": 1,
+        "comments": []
     },
     {
         "id": 3,
@@ -48,7 +50,17 @@ const posts = [
         "media": "https://picsum.photos/300/200",
         "visibility": "public",
         "date": "2025-08-11T03:47:00",
-        "likes": 0
+        "likes": 0,
+        "comments": [
+            {
+                "author": 1,
+                "description": "Absolutely agree!"
+            },
+            {
+                "author": 2,
+                "description": "Nice"
+            }
+        ]
     },
     {
         "id": 4,
@@ -57,7 +69,13 @@ const posts = [
         "media": null,
         "visibility": "friends",
         "date": "2025-12-04T21:10:00",
-        "likes": 2
+        "likes": 2,
+        "comments": [
+            {
+                "author": 3,
+                "description": "I'm waiting for the results!"
+            }
+        ]
     }
 ]
 
