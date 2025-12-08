@@ -1,0 +1,31 @@
+@import '../styles/variables';
+
+.navbar {
+  background-color: $surface-color;
+  height: 60px;
+  box-shadow: $shadow-sm;
+  display: flex;
+  align-items: center;
+  padding: 0 $spacing-md;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  ul {
+    display: flex;
+    gap: 20px;
+
+    li {
+      font-weight: bold;
+
+      a {
+        color: $text-secondary;
+        transition: color 0.2s;
+
+        &:hover {
+          color: $primary-color;
+        }
+      }
+    }
+  }
+}

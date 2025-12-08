@@ -1,0 +1,93 @@
+@import '../styles/variables';
+
+.post-card {
+  background-color: $surface-color;
+  border-radius: $border-radius;
+  padding: $spacing-md;
+  box-shadow: $shadow-sm;
+  color: $text-main;
+
+  .post-card-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+
+    .post-card-header-left {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+
+      .avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid $primary-color;
+      }
+
+      .post-card-header-left-info {
+        display: flex;
+        flex-direction: column;
+
+        .author-name {
+          font-weight: bold;
+          font-size: 1.1rem;
+        }
+
+        .date {
+          font-size: 0.85rem;
+          color: $text-secondary;
+        }
+      }
+    }
+
+    .visibility {
+      font-size: 0.8rem;
+      color: $text-secondary;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+  }
+
+  .post-card-content {
+    margin-bottom: 15px;
+
+    .post-card-content-description {
+      margin-bottom: 10px;
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+
+    .post-card-content-media {
+      img {
+        width: 100%;
+        height: auto;
+        border-radius: $border-radius;
+        border: 1px solid rgba(255,255,255, 0.1);
+      }
+    }
+  }
+
+  .post-card-actions {
+    display: flex;
+    justify-content: space-around;
+    border-top: 1px solid rgba(255,255,255, 0.1);
+    padding-top: 10px;
+
+    .like, .comment, .share {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      color: $text-secondary;
+      padding: 8px 16px;
+      border-radius: 4px;
+      transition: all 0.2s;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.05);
+        color: $primary-color;
+      }
+    }
+  }
+}

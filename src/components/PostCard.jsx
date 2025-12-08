@@ -1,4 +1,5 @@
 import { FaHeart, FaRegComment, FaShare } from 'react-icons/fa';
+import './PostCard.scss'
 
 function PostCard({post, author}) {
     return (

@@ -1,0 +1,20 @@
+@import '../styles/variables';
+
+.feed-page {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: $spacing-md;
+
+  h1 {
+    margin-bottom: 20px;
+    color: $primary-color;
+    border-bottom: 2px solid $surface-color;
+    padding-bottom: 10px;
+  }
+
+  .feed-posts {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+}

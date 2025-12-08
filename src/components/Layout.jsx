@@ -1,4 +1,5 @@
 import Navbar from "./Navbar.jsx";
+import './Layout.scss'
 
 function Layout({ children }) {
     return (

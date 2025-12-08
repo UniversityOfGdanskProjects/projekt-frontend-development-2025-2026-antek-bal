@@ -1,9 +1,10 @@
 import {users, posts} from "../data/mockData"
 import PostCard from "../components/PostCard"
+import './Feed.scss'
 
 function Feed() {
     return (
-        <div>
+        <div className="feed-page">
             <h1>Wall</h1>
             <div className="feed-posts">
                 {posts.map(post => {

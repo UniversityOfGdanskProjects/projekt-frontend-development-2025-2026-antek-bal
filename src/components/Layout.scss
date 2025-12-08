@@ -1,0 +1,13 @@
+@import '../styles/variables';
+
+.layout {
+  background-color: $bg-color;
+  color: $text-main;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  width: 100%;
+}
