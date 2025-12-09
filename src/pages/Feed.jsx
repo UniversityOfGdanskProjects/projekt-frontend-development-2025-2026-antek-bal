@@ -3,11 +3,13 @@ import PostCard from "../components/PostCard"
 import './Feed.scss'
 
 function Feed() {
+    const sortedPosts = [...posts].sort((a, b) => new Date(b.date) - new Date(a.date))
+
     return (
         <div className="feed-page">
             <h1>Wall</h1>
             <div className="feed-posts">
-                {posts.map(post => {
+                {sortedPosts.map(post => {
                     const author = users.find(user => user.id === post.author)
 
                     return (
