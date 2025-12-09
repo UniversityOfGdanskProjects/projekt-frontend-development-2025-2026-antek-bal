@@ -1,4 +1,4 @@
-import { FaHeart, FaRegComment, FaShare } from 'react-icons/fa';
+import {FaHeart, FaRegComment, FaShare} from 'react-icons/fa';
 import './PostCard.scss'
 
 function PostCard({post, author}) {
@@ -6,10 +6,10 @@ function PostCard({post, author}) {
         <div className="post-card">
             <div className="post-card-header">
                 <div className="post-card-header-left">
-                    <img className="avatar" src={author.avatar} alt="avatar" />
+                    <img className="avatar" src={author.avatar} alt="avatar"/>
                     <div className="post-card-header-left-info">
                         <div className="author-name">{author.name} {author.surname}</div>
-                        <div className="date">{post.date}</div>
+                        <div className="date">{new Date(post.date).toLocaleString()}</div>
                     </div>
                 </div>
                 <div className="post-card-header-right">

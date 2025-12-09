@@ -1,10 +1,10 @@
 import Navbar from "./Navbar.jsx";
 import './Layout.scss'
 
-function Layout({ children }) {
+function Layout({children}) {
     return (
         <main className="layout">
-            <Navbar />
+            <Navbar/>
             {children}
         </main>
     )
