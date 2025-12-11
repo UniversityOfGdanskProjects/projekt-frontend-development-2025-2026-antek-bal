@@ -39,6 +39,30 @@
         }
       }
 
+      .image-preview {
+        margin-bottom: 10px;
+        position: relative;
+
+        img {
+          max-width: 100%;
+          max-height: 200px;
+          border-radius: 8px;
+        }
+
+        button {
+          position: absolute;
+          top: 5px;
+          right: 5px;
+          background: rgba(0, 0, 0, 0.6);
+          color: white;
+          border: none;
+          border-radius: 50%;
+          width: 24px;
+          height: 24px;
+          cursor: pointer;
+        }
+      }
+
       .form-actions {
         display: flex;
         justify-content: space-between;
