@@ -80,7 +80,7 @@ function CreatePostForm({onAddPost}) {
                             onChange={handleImageChange}
                         />
 
-                        <button onClick={handleSubmit} disabled={!content.trim()}>
+                        <button onClick={handleSubmit} disabled={!content.trim() && !selectedImage}>
                             Post
                         </button>
                     </div>
