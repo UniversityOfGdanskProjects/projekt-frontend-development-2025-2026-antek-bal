@@ -1,3 +1,4 @@
+import {Link} from 'react-router-dom';
 import {FaHeart, FaRegComment, FaShare} from 'react-icons/fa';
 import './PostCard.scss'
 import {useState} from 'react';
@@ -21,9 +22,9 @@ function PostCard({post, author}) {
         <div className="post-card">
             <div className="post-card-header">
                 <div className="post-card-header-left">
-                    <img className="avatar" src={author.avatar} alt="avatar"/>
+                    <Link to={`/profile/${post.author}`}><img className="avatar" src={author.avatar} alt="avatar"/></Link>
                     <div className="post-card-header-left-info">
-                        <div className="author-name">{author.name} {author.surname}</div>
+                        <div className="author-name"><Link to={`/profile/${post.author}`}>{author.name} {author.surname}</Link></div>
                         <div className="date">{new Date(post.date).toLocaleString()}</div>
                     </div>
                 </div>
