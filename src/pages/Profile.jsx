@@ -1,6 +1,7 @@
 import {useParams} from 'react-router-dom';
 import {users, posts} from '../data/mockData.js';
 import PostCard from "../components/PostCard.jsx";
+import './Profile.scss'
 
 function Profile() {
     const {userId} = useParams();

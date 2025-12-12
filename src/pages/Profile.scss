@@ -1,0 +1,58 @@
+@import '../styles/variables';
+
+.profile-page {
+  width: 700px;
+  margin: 0 auto;
+  padding: $spacing-md;
+
+  .profile-header {
+    background-color: $surface-color;
+    padding: 30px;
+    border-radius: $border-radius;
+    box-shadow: $shadow-sm;
+
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    margin-bottom: 30px;
+
+    .profile-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 4px solid $primary-color;
+      object-fit: cover;
+    }
+
+    .profile-info {
+      display: flex;
+      flex-direction: column;
+
+      h1 {
+        margin: 0;
+        font-size: 2rem;
+        color: $primary-color;
+        font-weight: bold;
+      }
+
+      .friends-count {
+        margin-top: 5px;
+        color: $text-secondary;
+        font-size: 1rem;
+      }
+    }
+  }
+
+  .profile-posts {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    p {
+      text-align: center;
+      color: $text-secondary;
+      font-style: italic;
+      margin-top: 20px;
+    }
+  }
+}
