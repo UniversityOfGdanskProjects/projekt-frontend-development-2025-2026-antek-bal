@@ -2,11 +2,19 @@ import {users, posts} from "../data/mockData"
 import PostCard from "../components/PostCard"
 import PostForm from "../components/PostForm";
 import './Feed.scss'
-import {useState} from "react";
+import {useState, useEffect} from "react";
 
 
 function Feed() {
-    const [allPosts, updatePosts] = useState(posts);
+    const [allPosts, updatePosts] = useState(() => {
+        const savedPosts = localStorage.getItem("feed-posts");
+
+        return savedPosts ? JSON.parse(savedPosts) : posts;
+    });
+    useEffect(() => {
+        localStorage.setItem('feed-posts', JSON.stringify(allPosts));
+    }, [allPosts]);
+
     const handleAddPost = (newPost) => {
         updatePosts([...allPosts, newPost]);
     }
