@@ -1,6 +1,7 @@
 const users = [
     {
         "id": 1,
+        "username": "jdoe1",
         "name": "John",
         "surname": "Doe",
         "avatar": "https://i.pravatar.cc/150?img=1",
@@ -8,6 +9,7 @@ const users = [
     },
     {
         "id": 2,
+        "username": "james_buck",
         "name": "James",
         "surname": "Buck",
         "avatar": "https://i.pravatar.cc/150?img=2",
@@ -15,6 +17,7 @@ const users = [
     },
     {
         "id": 3,
+        "username": "stingerj06",
         "name": "Joseph",
         "surname": "Singer",
         "avatar": "https://i.pravatar.cc/150?img=3",
