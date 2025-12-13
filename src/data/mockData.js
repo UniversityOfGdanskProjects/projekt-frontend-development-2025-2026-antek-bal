@@ -2,6 +2,7 @@ const users = [
     {
         "id": 1,
         "username": "jdoe1",
+        "password": "cGFzc3dvcmQxMjM=",
         "name": "John",
         "surname": "Doe",
         "avatar": "https://i.pravatar.cc/150?img=1",
@@ -10,6 +11,7 @@ const users = [
     {
         "id": 2,
         "username": "james_buck",
+        "password": "aWxvdmVwaXp6YQ==",
         "name": "James",
         "surname": "Buck",
         "avatar": "https://i.pravatar.cc/150?img=2",
@@ -18,6 +20,7 @@ const users = [
     {
         "id": 3,
         "username": "stingerj06",
+        "password": "Y2hvY29sYXRlYmFuYW5hc2hha2UxMjM0NQ==",
         "name": "Joseph",
         "surname": "Singer",
         "avatar": "https://i.pravatar.cc/150?img=3",
