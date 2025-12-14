@@ -36,7 +36,7 @@ export const AuthProvider = ({children}) => {
         return false;
     }
 
-    const register = (username, password, name, surname, avatar="https://www.gravatar.com/avatar/?d=mp&s=256") => {
+    const register = (username, password, name, surname, avatar) => {
         const usernameOccupied = allUsers.find(u => u.username === username);
         if (usernameOccupied) {
             return false
@@ -48,7 +48,7 @@ export const AuthProvider = ({children}) => {
             "password": btoa(password),
             "name": name,
             "surname": surname,
-            "avatar": avatar,
+            "avatar": avatar || "https://www.gravatar.com/avatar/?d=mp&s=256",
             "friends": []
         };
 
