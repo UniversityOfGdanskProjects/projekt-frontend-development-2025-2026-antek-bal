@@ -1,11 +1,16 @@
 import {useParams} from 'react-router-dom';
-import {users, posts} from '../data/mockData.js';
+import {useAuth} from "../context/AuthContext";
+import {posts as initialPosts} from '../data/mockData.js';
 import PostCard from "../components/PostCard.jsx";
 import './Profile.scss'
 
 function Profile() {
     const {userId} = useParams();
-    const user = users.find((user) => user.id === Number(userId));
+    const {allUsers} = useAuth();
+
+    const allPosts = JSON.parse(localStorage.getItem("feed-posts")) || initialPosts;
+
+    const user = allUsers.find((user) => user.id === Number(userId));
 
     if (!user) {
         return (
@@ -13,7 +18,7 @@ function Profile() {
         )
     }
 
-    const userPosts = posts
+    const userPosts = allPosts
         .filter(p => p.author === user.id)
         .sort((a, b) => new Date(b.date) - new Date(a.date));
 

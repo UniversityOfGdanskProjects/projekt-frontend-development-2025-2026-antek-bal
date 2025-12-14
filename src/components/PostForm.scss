@@ -101,6 +101,27 @@
           }
         }
       }
+      input[type="file"] {
+        margin-top: 10px;
+        color: $text-secondary;
+        font-size: 0.9rem;
+        cursor: pointer;
+
+        &::file-selector-button {
+          background-color: rgba(255, 255, 255, 0.1);
+          border: none;
+          color: $text-main;
+          padding: 8px 12px;
+          border-radius: 4px;
+          margin-right: 10px;
+          cursor: pointer;
+          transition: background 0.2s;
+
+          &:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+          }
+        }
+      }
     }
   }
 }
