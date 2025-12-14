@@ -1,19 +1,23 @@
 import {useState} from 'react';
+import {useAuth} from "../context/AuthContext";
 import './PostForm.scss';
-import {users} from '../data/mockData';
 
 function CreatePostForm({onAddPost}) {
     const [content, setContent] = useState('');
     const [visibility, setVisibility] = useState('public');
     const [selectedImage, setSelectedImage] = useState(null);
-
-    const currentUser = users.find(u => u.id === 1);
+    const {currentUser} = useAuth();
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
-            const imageUrl = URL.createObjectURL(file);
-            setSelectedImage(imageUrl);
+            const reader = new FileReader();
+
+            reader.onloadend = () => {
+                setSelectedImage(reader.result);
+            };
+
+            reader.readAsDataURL(file);
         }
     };
 
