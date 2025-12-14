@@ -1,6 +1,7 @@
 import {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {useAuth} from "../context/AuthContext.jsx"
+import "./Login.scss"
 
 
 function Login() {
@@ -131,6 +132,7 @@ function Login() {
                                     x
                                 </button>
                             </div>)}
+                                <label className="file-label">Avatar (optional):</label>
                                 <input
                                     type="file"
                                     accept="image/*"
