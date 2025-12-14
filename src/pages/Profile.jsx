@@ -1,8 +1,8 @@
-import {useParams} from 'react-router-dom';
-import {useAuth} from "../context/AuthContext";
-import {posts as initialPosts} from '../data/mockData.js';
+import {useParams} from "react-router-dom";
 import PostCard from "../components/PostCard.jsx";
-import './Profile.scss'
+import {useAuth} from "../context/AuthContext";
+import {posts as initialPosts} from "../data/mockData.js";
+import "./Profile.scss";
 
 function Profile() {
     const {userId} = useParams();
@@ -15,7 +15,7 @@ function Profile() {
     if (!user) {
         return (
             <div className="profile-page">404 User not found</div>
-        )
+        );
     }
 
     const userPosts = allPosts
@@ -47,7 +47,7 @@ function Profile() {
                 )}
             </div>
         </div>
-    )
+    );
 }
 
 export default Profile;

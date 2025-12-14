@@ -1,5 +1,5 @@
 import Navbar from "./Navbar.jsx";
-import './Layout.scss'
+import "./Layout.scss";
 
 function Layout({children}) {
     return (
@@ -7,7 +7,7 @@ function Layout({children}) {
             <Navbar/>
             {children}
         </main>
-    )
+    );
 }
 
 export default Layout;

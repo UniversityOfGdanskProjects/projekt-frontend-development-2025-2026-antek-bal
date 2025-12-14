@@ -1,9 +1,9 @@
 import {useState, useEffect} from "react";
-import {useAuth} from "../context/AuthContext.jsx"
-import {posts} from "../data/mockData"
-import PostCard from "../components/PostCard"
+import PostCard from "../components/PostCard";
 import PostForm from "../components/PostForm";
-import './Feed.scss'
+import {useAuth} from "../context/AuthContext.jsx";
+import {posts} from "../data/mockData";
+import "./Feed.scss";
 
 
 function Feed() {
@@ -29,7 +29,7 @@ function Feed() {
         filteredPosts = allPosts.filter(p => p.visibility === "public");
     }
 
-    const sortedPosts = [...filteredPosts].sort((a, b) => new Date(b.date) - new Date(a.date))
+    const sortedPosts = [...filteredPosts].sort((a, b) => new Date(b.date) - new Date(a.date));
 
 
     return (
@@ -52,7 +52,7 @@ function Feed() {
                 })}
             </div>
         </div>
-    )
+    );
 }
 
 export default Feed;

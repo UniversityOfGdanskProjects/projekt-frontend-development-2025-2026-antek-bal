@@ -1,8 +1,9 @@
-import {Routes, Route} from 'react-router-dom';
+import {Routes, Route} from "react-router-dom";
+import Layout from "./components/Layout.jsx";
 import Feed from "./pages/Feed.jsx";
 import Profile from "./pages/Profile.jsx";
 import Login from "./pages/Login.jsx";
-import Layout from "./components/Layout.jsx";
+
 
 function App() {
     return (
@@ -13,7 +14,7 @@ function App() {
                 <Route path="/profile/:userId" element={<Profile/>}></Route>
             </Routes>
         </Layout>
-    )
+    );
 }
 
 export default App;

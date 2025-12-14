@@ -1,6 +1,6 @@
 import {Link} from "react-router-dom"
 import {useAuth} from "../context/AuthContext.jsx"
-import './Navbar.scss'
+import "./Navbar.scss"
 
 function Navbar() {
     const {currentUser, logout} = useAuth();
@@ -21,7 +21,7 @@ function Navbar() {
                 }
             </ul>
         </nav>
-    )
+    );
 }
 
 export default Navbar;

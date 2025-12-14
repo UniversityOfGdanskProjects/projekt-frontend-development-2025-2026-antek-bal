@@ -1,7 +1,7 @@
+import {useState} from "react";
 import {Link} from "react-router-dom";
-import {useState} from 'react';
 import {useAuth} from "../context/AuthContext";
-import './PostForm.scss';
+import "./PostForm.scss";
 
 function CreatePostForm({onAddPost}) {
     const [content, setContent] = useState('');
@@ -20,7 +20,7 @@ function CreatePostForm({onAddPost}) {
 
             reader.readAsDataURL(file);
         }
-    };
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -36,7 +36,7 @@ function CreatePostForm({onAddPost}) {
             likes: 0,
             comments: [],
             visibility: visibility
-        };
+        }
 
         onAddPost(newPost);
 

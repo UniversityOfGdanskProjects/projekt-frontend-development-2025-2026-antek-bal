@@ -1,11 +1,10 @@
-import {Link} from 'react-router-dom';
-import {FaHeart, FaRegComment, FaShare} from 'react-icons/fa';
-import './PostCard.scss'
-import {useState} from 'react';
+import {useState} from "react";
+import {Link} from "react-router-dom";
+import {FaHeart, FaRegComment, FaShare} from "react-icons/fa";
+import "./PostCard.scss";
 
 function PostCard({post, author}) {
 
-    // =============== Handling like button ===============
     const [likes, setLikes] = useState(post.likes);
     const [isLiked, setIsLiked] = useState(false);
     const handleLike = () => {
@@ -48,7 +47,7 @@ function PostCard({post, author}) {
                 <div className="share"><FaShare/></div>
             </div>
         </div>
-    )
+    );
 }
 
-export default PostCard
+export default PostCard;

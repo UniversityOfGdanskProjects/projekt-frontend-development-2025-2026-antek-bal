@@ -85,4 +85,4 @@ const posts = [
     }
 ]
 
-export {users, posts}
+export {users, posts};

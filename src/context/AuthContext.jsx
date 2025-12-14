@@ -1,7 +1,7 @@
 import {useState, createContext, useContext, useEffect} from "react";
-import {users} from '../data/mockData.js';
+import {users} from "../data/mockData.js";
 
-const AuthContext = createContext(null)
+const AuthContext = createContext(null);
 
 export const AuthProvider = ({children}) => {
     const [allUsers, updateUsers] = useState(() => {
@@ -27,8 +27,8 @@ export const AuthProvider = ({children}) => {
     }, [currentUser]);
 
     const login = (username, password) => {
-        const passwordHash = btoa(password)
-        const user = allUsers.find(u => u.username === username && u.password === passwordHash)
+        const passwordHash = btoa(password);
+        const user = allUsers.find(u => u.username === username && u.password === passwordHash);
         if (user) {
             setCurrentUser(user);
             return true;
@@ -39,7 +39,7 @@ export const AuthProvider = ({children}) => {
     const register = (username, password, name, surname, avatar) => {
         const usernameOccupied = allUsers.find(u => u.username === username);
         if (usernameOccupied) {
-            return false
+            return false;
         }
 
         const newUser = {
@@ -50,7 +50,7 @@ export const AuthProvider = ({children}) => {
             "surname": surname,
             "avatar": avatar || "https://www.gravatar.com/avatar/?d=mp&s=256",
             "friends": []
-        };
+        }
 
         updateUsers([...allUsers, newUser]);
         setCurrentUser(newUser);
@@ -59,7 +59,7 @@ export const AuthProvider = ({children}) => {
 
     const logout = () => {
         setCurrentUser(null);
-        return true
+        return true;
     }
 
     const value = {
@@ -68,13 +68,13 @@ export const AuthProvider = ({children}) => {
         login,
         logout,
         register
-    };
+    }
 
     return (
         <AuthContext.Provider value={value}>
             {children}
         </AuthContext.Provider>
-    )
+    );
 }
 
 export const useAuth = () => useContext(AuthContext);
