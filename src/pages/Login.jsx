@@ -81,7 +81,7 @@ function Login() {
                             onChange={(e) => setLoginUsername(e.target.value)}
                         />
                         <input
-                            type="text"
+                            type="password"
                             placeholder="password"
                             value={loginPassword}
                             onChange={(e) => setLoginPassword(e.target.value)}
@@ -102,7 +102,7 @@ function Login() {
                             onChange={(e) => setRegisterUsername(e.target.value)}
                         />
                         <input
-                            type="text"
+                            type="password"
                             placeholder="password"
                             value={registerPassword}
                             onChange={(e) => setRegisterPassword(e.target.value)}
