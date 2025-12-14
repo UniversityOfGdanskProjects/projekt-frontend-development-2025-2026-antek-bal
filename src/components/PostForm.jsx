@@ -47,7 +47,8 @@ function CreatePostForm({onAddPost}) {
     return (
         <div className="create-post-card">
             <div className="form-header">
-                <Link to={`/profile/${currentUser.id}`}><img src={currentUser.avatar} alt="me" className="avatar"/></Link>
+                <Link to={`/profile/${currentUser.id}`}><img src={currentUser.avatar} alt="me"
+                                                             className="avatar"/></Link>
                 <div className="inputs">
                     <textarea
                         placeholder={`What's on your mind, ${currentUser.name}?`}

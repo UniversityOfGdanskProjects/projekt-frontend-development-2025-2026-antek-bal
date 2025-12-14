@@ -10,11 +10,13 @@ function Navbar() {
             <ul>
                 <li><Link to="/">Feed</Link></li>
                 {currentUser ? (
-                    <>
-                        <li><Link to={`/profile/${currentUser.id}`}>My Profile</Link></li>
-                        <li><button onClick={logout}>Logout</button></li>
-                    </>
-                ) :
+                        <>
+                            <li><Link to={`/profile/${currentUser.id}`}>My Profile</Link></li>
+                            <li>
+                                <button onClick={logout}>Logout</button>
+                            </li>
+                        </>
+                    ) :
                     <li><Link to="/login">Login</Link></li>
                 }
             </ul>

@@ -25,7 +25,7 @@ function Profile() {
     return (
         <div className="profile-page">
             <div className="profile-header">
-                <img src={user.avatar} className="profile-avatar" alt="profile" />
+                <img src={user.avatar} className="profile-avatar" alt="profile"/>
 
                 <div className="profile-info">
                     <h1>{user.name} {user.surname}</h1>

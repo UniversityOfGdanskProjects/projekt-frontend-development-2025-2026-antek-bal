@@ -52,9 +52,9 @@ export const AuthProvider = ({children}) => {
             "friends": []
         };
 
-       updateUsers([...allUsers, newUser]);
-       setCurrentUser(newUser);
-       return true;
+        updateUsers([...allUsers, newUser]);
+        setCurrentUser(newUser);
+        return true;
     }
 
     const logout = () => {

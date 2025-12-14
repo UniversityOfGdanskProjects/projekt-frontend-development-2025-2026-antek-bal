@@ -32,7 +32,6 @@ function Feed() {
     const sortedPosts = [...filteredPosts].sort((a, b) => new Date(b.date) - new Date(a.date))
 
 
-
     return (
         <div className="feed-page">
             <h1>Wall</h1>

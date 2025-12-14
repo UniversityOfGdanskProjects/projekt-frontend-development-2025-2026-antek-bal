@@ -22,9 +22,11 @@ function PostCard({post, author}) {
         <div className="post-card">
             <div className="post-card-header">
                 <div className="post-card-header-left">
-                    <Link to={`/profile/${post.author}`}><img className="avatar" src={author.avatar} alt="avatar"/></Link>
+                    <Link to={`/profile/${post.author}`}><img className="avatar" src={author.avatar}
+                                                              alt="avatar"/></Link>
                     <div className="post-card-header-left-info">
-                        <div className="author-name"><Link to={`/profile/${post.author}`}>{author.name} {author.surname}</Link></div>
+                        <div className="author-name"><Link
+                            to={`/profile/${post.author}`}>{author.name} {author.surname}</Link></div>
                         <div className="date">{new Date(post.date).toLocaleString()}</div>
                     </div>
                 </div>

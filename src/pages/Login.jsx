@@ -132,12 +132,12 @@ function Login() {
                                     x
                                 </button>
                             </div>)}
-                                <label className="file-label">Avatar (optional):</label>
-                                <input
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={handleImageChange}
-                                />
+                        <label className="file-label">Avatar (optional):</label>
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImageChange}
+                        />
                     </div>
                     <button type="submit">Register</button>
                 </form>
