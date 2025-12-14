@@ -1,3 +1,4 @@
+import {Link} from "react-router-dom";
 import {useState} from 'react';
 import {useAuth} from "../context/AuthContext";
 import './PostForm.scss';
@@ -46,7 +47,7 @@ function CreatePostForm({onAddPost}) {
     return (
         <div className="create-post-card">
             <div className="form-header">
-                <img src={currentUser.avatar} alt="me" className="avatar"/>
+                <Link to={`/profile/${currentUser.id}`}><img src={currentUser.avatar} alt="me" className="avatar"/></Link>
                 <div className="inputs">
                     <textarea
                         placeholder={`What's on your mind, ${currentUser.name}?`}
