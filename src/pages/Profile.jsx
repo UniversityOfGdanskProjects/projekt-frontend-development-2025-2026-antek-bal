@@ -49,9 +49,14 @@ function Profile() {
         setAllPosts(updatedPosts)
     }
 
-    const userPosts = allPosts
-        .filter(p => p.author === user.id)
-        .sort((a, b) => new Date(b.date) - new Date(a.date));
+    let filteredPosts;
+    if (currentUser) {
+        filteredPosts = allPosts.filter(p => (p.visibility === "public" || (p.visibility === "friends" && currentUser.friends.includes(p.author)) || p.author === currentUser.id));
+    } else {
+        filteredPosts = allPosts.filter(p => p.visibility === "public");
+    }
+    const userPosts = [...filteredPosts].filter(p => p.author === user.id);
+    const sortedPosts = [...userPosts].sort((a, b) => new Date(b.date) - new Date(a.date));
 
     return (
         <div className="profile-page">
@@ -65,8 +70,8 @@ function Profile() {
             </div>
 
             <div className="profile-posts">
-                {userPosts.length > 0 ? (
-                    userPosts.map(post => (
+                {sortedPosts.length > 0 ? (
+                    sortedPosts.map(post => (
                         <PostCard
                             key={post.id}
                             post={post}
