@@ -1,30 +1,23 @@
-import {Link} from 'react-router-dom';
-import {FaHeart, FaRegComment, FaShare} from 'react-icons/fa';
-import './PostCard.scss'
-import {useState} from 'react';
+import {Link} from "react-router-dom";
+import {FaHeart, FaRegComment, FaShare} from "react-icons/fa";
+import {useAuth} from "../context/AuthContext.jsx";
+import "./PostCard.scss";
 
-function PostCard({post, author}) {
+function PostCard({post, author, onToggleLike}) {
+    const {currentUser} = useAuth();
 
-    // =============== Handling like button ===============
-    const [likes, setLikes] = useState(post.likes);
-    const [isLiked, setIsLiked] = useState(false);
-    const handleLike = () => {
-        if (isLiked) {
-            setLikes(likes - 1);
-            setIsLiked(false);
-        } else {
-            setLikes(likes + 1);
-            setIsLiked(true);
-        }
-    }
+    const isLiked = currentUser && (post.likedBy || []).includes(currentUser.id);
+    const likeCount = (post.likedBy || []).length + (post.likes || 0)
 
     return (
         <div className="post-card">
             <div className="post-card-header">
                 <div className="post-card-header-left">
-                    <Link to={`/profile/${post.author}`}><img className="avatar" src={author.avatar} alt="avatar"/></Link>
+                    <Link to={`/profile/${post.author}`}><img className="avatar" src={author.avatar}
+                                                              alt="avatar"/></Link>
                     <div className="post-card-header-left-info">
-                        <div className="author-name"><Link to={`/profile/${post.author}`}>{author.name} {author.surname}</Link></div>
+                        <div className="author-name"><Link
+                            to={`/profile/${post.author}`}>{author.name} {author.surname}</Link></div>
                         <div className="date">{new Date(post.date).toLocaleString()}</div>
                     </div>
                 </div>
@@ -41,12 +34,12 @@ function PostCard({post, author}) {
                 </div>
             </div>
             <div className="post-card-actions">
-                <div className={`like ${isLiked ? 'active' : ''}`} onClick={handleLike}><FaHeart/>{likes}</div>
+                <div className={`like ${isLiked ? 'active' : ''}`} onClick={() => onToggleLike(post.id)}><FaHeart/>{likeCount}</div>
                 <div className="comment"><FaRegComment/>{post.comments.length}</div>
                 <div className="share"><FaShare/></div>
             </div>
         </div>
-    )
+    );
 }
 
-export default PostCard
+export default PostCard;

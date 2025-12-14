@@ -1,12 +1,13 @@
 import {useState, useEffect} from "react";
-import {useAuth} from "../context/AuthContext.jsx"
-import {posts} from "../data/mockData"
-import PostCard from "../components/PostCard"
+import PostCard from "../components/PostCard";
 import PostForm from "../components/PostForm";
-import './Feed.scss'
+import {useAuth} from "../context/AuthContext.jsx";
+import {posts} from "../data/mockData";
+import "./Feed.scss";
 
 
 function Feed() {
+    const {currentUser, allUsers} = useAuth();
     const [allPosts, updatePosts] = useState(() => {
         const savedPosts = localStorage.getItem("feed-posts");
 
@@ -17,10 +18,32 @@ function Feed() {
     }, [allPosts]);
 
     const handleAddPost = (newPost) => {
-        updatePosts([...allPosts, newPost]);
+        const postLikes = {...newPost, likedBy: []}
+        updatePosts([...allPosts, postLikes]);
     }
 
-    const {currentUser, allUsers} = useAuth();
+    const handleToggleLike = (postId) => {
+        if (!currentUser) return;
+
+        const updatedPosts = allPosts.map(post => {
+            if (post.id === postId) {
+                const currentLikes = post.likedBy || [];
+                const isLiked = currentLikes.includes(currentUser.id);
+
+                let newLikedBy;
+                if (isLiked) {
+                    newLikedBy = currentLikes.filter(id => id !== currentUser.id);
+                } else {
+                    newLikedBy = [...currentLikes, currentUser.id];
+                }
+
+                return { ...post, likedBy: newLikedBy };
+            }
+            return post;
+        });
+
+        updatePosts(updatedPosts);
+    };
 
     let filteredPosts;
     if (currentUser) {
@@ -29,8 +52,7 @@ function Feed() {
         filteredPosts = allPosts.filter(p => p.visibility === "public");
     }
 
-    const sortedPosts = [...filteredPosts].sort((a, b) => new Date(b.date) - new Date(a.date))
-
+    const sortedPosts = [...filteredPosts].sort((a, b) => new Date(b.date) - new Date(a.date));
 
 
     return (
@@ -48,12 +70,13 @@ function Feed() {
                             key={post.id}
                             post={post}
                             author={author}
+                            onToggleLike={handleToggleLike}
                         />
                     )
                 })}
             </div>
         </div>
-    )
+    );
 }
 
 export default Feed;

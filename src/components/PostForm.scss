@@ -1,4 +1,4 @@
-@import '../styles/variables';
+@import "../styles/variables";
 
 .create-post-card {
   background-color: $surface-color;
@@ -12,10 +12,11 @@
     gap: 15px;
 
     .avatar {
-      width: 40px;
-      height: 40px;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
       object-fit: cover;
+      border: 2px solid $primary-color;
     }
 
     .inputs {
@@ -101,6 +102,7 @@
           }
         }
       }
+
       input[type="file"] {
         margin-top: 10px;
         color: $text-secondary;

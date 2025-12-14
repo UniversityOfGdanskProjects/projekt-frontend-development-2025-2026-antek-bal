@@ -1,6 +1,7 @@
-import {useState} from 'react';
+import {useState} from "react";
+import {Link} from "react-router-dom";
 import {useAuth} from "../context/AuthContext";
-import './PostForm.scss';
+import "./PostForm.scss";
 
 function CreatePostForm({onAddPost}) {
     const [content, setContent] = useState('');
@@ -19,7 +20,7 @@ function CreatePostForm({onAddPost}) {
 
             reader.readAsDataURL(file);
         }
-    };
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -35,7 +36,7 @@ function CreatePostForm({onAddPost}) {
             likes: 0,
             comments: [],
             visibility: visibility
-        };
+        }
 
         onAddPost(newPost);
 
@@ -46,7 +47,8 @@ function CreatePostForm({onAddPost}) {
     return (
         <div className="create-post-card">
             <div className="form-header">
-                <img src={currentUser.avatar} alt="me" className="avatar"/>
+                <Link to={`/profile/${currentUser.id}`}><img src={currentUser.avatar} alt="me"
+                                                             className="avatar"/></Link>
                 <div className="inputs">
                     <textarea
                         placeholder={`What's on your mind, ${currentUser.name}?`}

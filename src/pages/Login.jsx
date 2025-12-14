@@ -1,38 +1,38 @@
-import {useState} from 'react';
-import {useNavigate} from 'react-router-dom';
-import {useAuth} from "../context/AuthContext.jsx"
-import "./Login.scss"
+import {useState} from "react";
+import {useNavigate} from "react-router-dom";
+import {useAuth} from "../context/AuthContext.jsx";
+import "./Login.scss";
 
 
 function Login() {
     const navigate = useNavigate();
     const {login, register} = useAuth();
 
-    const [loginUsername, setLoginUsername] = useState("")
-    const [loginPassword, setLoginPassword] = useState("")
+    const [loginUsername, setLoginUsername] = useState("");
+    const [loginPassword, setLoginPassword] = useState("");
 
-    const [registerUsername, setRegisterUsername] = useState("")
-    const [registerPassword, setRegisterPassword] = useState("")
-    const [registerName, setRegisterName] = useState("")
-    const [registerSurname, setRegisterSurname] = useState("")
-    const [registerAvatar, setRegisterAvatar] = useState("")
+    const [registerUsername, setRegisterUsername] = useState("");
+    const [registerPassword, setRegisterPassword] = useState("");
+    const [registerName, setRegisterName] = useState("");
+    const [registerSurname, setRegisterSurname] = useState("");
+    const [registerAvatar, setRegisterAvatar] = useState("");
 
     const handleLogin = (e) => {
-        e.preventDefault()
+        e.preventDefault();
 
-        const success = login(loginUsername, loginPassword)
+        const success = login(loginUsername, loginPassword);
         if (success) {
-            navigate('/')
+            navigate('/');
         } else {
-            alert("Invalid credentials!")
+            alert("Invalid credentials!");
         }
     }
 
     const handleRegister = (e) => {
-        e.preventDefault()
+        e.preventDefault();
         if (!registerUsername || !registerPassword || !registerName || !registerSurname) {
-            alert("Complete all required fields")
-            return
+            alert("Complete all required fields");
+            return;
         }
 
         const success = register(
@@ -41,12 +41,12 @@ function Login() {
             registerName,
             registerSurname,
             registerAvatar
-        )
+        );
 
         if (success) {
-            navigate('/')
+            navigate('/');
         } else {
-            alert("This username is already in use!")
+            alert("This username is already in use!");
         }
 
     }
@@ -58,10 +58,10 @@ function Login() {
             const reader = new FileReader();
 
             reader.onloadend = () => {
-                const base64 = reader.result
+                const base64 = reader.result;
 
-                setRegisterAvatar(String(base64))
-                setSelectedImage(base64)
+                setRegisterAvatar(String(base64));
+                setSelectedImage(base64);
             }
 
             reader.readAsDataURL(file);
@@ -81,7 +81,7 @@ function Login() {
                             onChange={(e) => setLoginUsername(e.target.value)}
                         />
                         <input
-                            type="text"
+                            type="password"
                             placeholder="password"
                             value={loginPassword}
                             onChange={(e) => setLoginPassword(e.target.value)}
@@ -102,7 +102,7 @@ function Login() {
                             onChange={(e) => setRegisterUsername(e.target.value)}
                         />
                         <input
-                            type="text"
+                            type="password"
                             placeholder="password"
                             value={registerPassword}
                             onChange={(e) => setRegisterPassword(e.target.value)}
@@ -132,18 +132,18 @@ function Login() {
                                     x
                                 </button>
                             </div>)}
-                                <label className="file-label">Avatar (optional):</label>
-                                <input
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={handleImageChange}
-                                />
+                        <label className="file-label">Avatar (optional):</label>
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImageChange}
+                        />
                     </div>
                     <button type="submit">Register</button>
                 </form>
             </div>
         </div>
-    )
+    );
 }
 
 export default Login;
