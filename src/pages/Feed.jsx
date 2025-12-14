@@ -7,6 +7,7 @@ import "./Feed.scss";
 
 
 function Feed() {
+    const {currentUser, allUsers} = useAuth();
     const [allPosts, updatePosts] = useState(() => {
         const savedPosts = localStorage.getItem("feed-posts");
 
@@ -17,10 +18,32 @@ function Feed() {
     }, [allPosts]);
 
     const handleAddPost = (newPost) => {
-        updatePosts([...allPosts, newPost]);
+        const postLikes = {...newPost, likedBy: []}
+        updatePosts([...allPosts, postLikes]);
     }
 
-    const {currentUser, allUsers} = useAuth();
+    const handleToggleLike = (postId) => {
+        if (!currentUser) return;
+
+        const updatedPosts = allPosts.map(post => {
+            if (post.id === postId) {
+                const currentLikes = post.likedBy || [];
+                const isLiked = currentLikes.includes(currentUser.id);
+
+                let newLikedBy;
+                if (isLiked) {
+                    newLikedBy = currentLikes.filter(id => id !== currentUser.id);
+                } else {
+                    newLikedBy = [...currentLikes, currentUser.id];
+                }
+
+                return { ...post, likedBy: newLikedBy };
+            }
+            return post;
+        });
+
+        updatePosts(updatedPosts);
+    };
 
     let filteredPosts;
     if (currentUser) {
@@ -47,6 +70,7 @@ function Feed() {
                             key={post.id}
                             post={post}
                             author={author}
+                            onToggleLike={handleToggleLike}
                         />
                     )
                 })}

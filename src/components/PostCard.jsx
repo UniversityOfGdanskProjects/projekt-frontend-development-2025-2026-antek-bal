@@ -1,21 +1,13 @@
-import {useState} from "react";
 import {Link} from "react-router-dom";
 import {FaHeart, FaRegComment, FaShare} from "react-icons/fa";
+import {useAuth} from "../context/AuthContext.jsx";
 import "./PostCard.scss";
 
-function PostCard({post, author}) {
+function PostCard({post, author, onToggleLike}) {
+    const {currentUser} = useAuth();
 
-    const [likes, setLikes] = useState(post.likes);
-    const [isLiked, setIsLiked] = useState(false);
-    const handleLike = () => {
-        if (isLiked) {
-            setLikes(likes - 1);
-            setIsLiked(false);
-        } else {
-            setLikes(likes + 1);
-            setIsLiked(true);
-        }
-    }
+    const isLiked = currentUser && (post.likedBy || []).includes(currentUser.id);
+    const likeCount = (post.likedBy || []).length + (post.likes || 0)
 
     return (
         <div className="post-card">
@@ -42,7 +34,7 @@ function PostCard({post, author}) {
                 </div>
             </div>
             <div className="post-card-actions">
-                <div className={`like ${isLiked ? 'active' : ''}`} onClick={handleLike}><FaHeart/>{likes}</div>
+                <div className={`like ${isLiked ? 'active' : ''}`} onClick={() => onToggleLike(post.id)}><FaHeart/>{likeCount}</div>
                 <div className="comment"><FaRegComment/>{post.comments.length}</div>
                 <div className="share"><FaShare/></div>
             </div>

@@ -1,3 +1,4 @@
+import {useState, useEffect} from "react";
 import {useParams} from "react-router-dom";
 import PostCard from "../components/PostCard.jsx";
 import {useAuth} from "../context/AuthContext";
@@ -6,9 +7,16 @@ import "./Profile.scss";
 
 function Profile() {
     const {userId} = useParams();
-    const {allUsers} = useAuth();
+    const {allUsers, currentUser} = useAuth();
 
-    const allPosts = JSON.parse(localStorage.getItem("feed-posts")) || initialPosts;
+    const [allPosts, setAllPosts] = useState(() => {
+        const savedPosts = localStorage.getItem("feed-posts");
+        return savedPosts ? JSON.parse(savedPosts) : initialPosts;
+    });
+
+    useEffect(() => {
+        localStorage.setItem("feed-posts", JSON.stringify(allPosts));
+    }, [allPosts]);
 
     const user = allUsers.find((user) => user.id === Number(userId));
 
@@ -16,6 +24,29 @@ function Profile() {
         return (
             <div className="profile-page">404 User not found</div>
         );
+    }
+
+    const handleToggleLike = (postId) => {
+        if (!currentUser) return;
+
+        const updatedPosts = allPosts.map(post => {
+            if (post.id === postId) {
+                const currentLikes = post.likedBy || [];
+                const isLiked = currentLikes.includes(currentUser.id)
+
+                let newLikedBy;
+                if (isLiked) {
+                    newLikedBy = currentLikes.filter(id => id !== currentUser.id);
+                } else {
+                    newLikedBy = [...currentLikes, currentUser.id]
+                }
+
+                return {...post, likedBy: newLikedBy};
+            }
+            return post;
+        })
+
+        setAllPosts(updatedPosts)
     }
 
     const userPosts = allPosts
@@ -40,6 +71,7 @@ function Profile() {
                             key={post.id}
                             post={post}
                             author={user}
+                            onToggleLike={handleToggleLike}
                         />
                     ))
                 ) : (
