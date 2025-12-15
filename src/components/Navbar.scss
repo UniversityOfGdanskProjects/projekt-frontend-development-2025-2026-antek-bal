@@ -3,128 +3,210 @@
 .navbar {
   background-color: $surface-color;
   height: 60px;
+  padding: 0 $spacing-md;
   box-shadow: $shadow-sm;
+
   display: flex;
   align-items: center;
-  padding: 0 $spacing-md;
+  justify-content: space-between;
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 1000;
 
-  ul {
-    display: flex;
-    gap: 20px;
-
-    li {
+  .nav-left {
+    .logo {
+      font-size: 1.5rem;
       font-weight: bold;
+      color: $primary-color;
+      text-decoration: none;
+    }
+  }
 
-      a {
+  .nav-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+
+    .search-bar {
+      position: relative;
+      width: 100%;
+      max-width: 400px;
+
+      .search-icon {
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
         color: $text-secondary;
-        transition: color 0.2s;
+      }
 
-        &:hover {
-          color: $primary-color;
+      input {
+        width: 100%;
+        padding: 10px 10px 10px 35px;
+        border-radius: 20px;
+        border: none;
+        background-color: rgba(255, 255, 255, 0.1);
+        color: $text-main;
+        outline: none;
+
+        &:focus {
+          background-color: rgba(255, 255, 255, 0.2);
+        }
+      }
+
+      .search-results {
+        position: absolute;
+        top: 110%;
+        left: 0;
+        width: 100%;
+        background-color: $surface-color;
+        border-radius: 8px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        border: 1px solid rgba(255,255,255,0.1);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+
+        .search-item {
+          display: flex;
+          align-items: center;
+          padding: 10px;
+          text-decoration: none;
+          color: $text-main;
+          border-bottom: 1px solid rgba(255,255,255,0.05);
+          transition: background 0.2s;
+
+          &:hover {
+            background-color: rgba(255,255,255,0.1);
+          }
+
+          img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            margin-right: 10px;
+            object-fit: cover;
+          }
+
+          .user-info {
+            display: flex;
+            flex-direction: column;
+
+            .name { font-weight: bold; font-size: 0.9rem; }
+            .username { font-size: 0.8rem; color: $text-secondary; }
+          }
         }
       }
     }
+  }
 
-    button {
-      border: none;
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    a, button {
       color: $text-secondary;
+      text-decoration: none;
       font-weight: bold;
-      transition: color 0.2s;
-      background-color: transparent;
-      font-size: 1rem;
+      background: none;
+      border: none;
       cursor: pointer;
+      font-size: 1rem;
+      transition: color 0.2s;
 
       &:hover {
         color: $primary-color;
       }
     }
-  }
-}
-.notification-container {
-  position: relative;
-  margin-right: 10px;
 
-  .notification-btn {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
-    padding: 5px;
-    cursor: pointer;
+    .notification-container {
+      position: relative;
+      margin-right: 10px;
 
-    .badge {
-      position: absolute;
-      top: -2px;
-      right: -2px;
-      background-color: #ff3d00;
-      color: white;
-      font-size: 0.65rem;
-      min-width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 2px solid $surface-color;
-      font-weight: bold;
-    }
-  }
+      .notification-btn {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        padding: 5px;
+        cursor: pointer;
 
-  .notification-dropdown {
-    position: absolute;
-    top: 50px;
-    right: -20px;
-    width: 280px;
-    max-height: 400px;
-    overflow-y: auto;
-    background-color: $surface-color;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: $border-radius;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-
-    .notification-item {
-      padding: 12px 15px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-
-      &:hover {
-        background-color: rgba(255, 255, 255, 0.1);
+        .badge {
+          position: absolute;
+          top: -2px;
+          right: -2px;
+          background-color: #ff3d00;
+          color: white;
+          font-size: 0.65rem;
+          min-width: 16px;
+          height: 16px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border: 2px solid $surface-color;
+          font-weight: bold;
+        }
       }
 
-      &.unread {
-        background-color: rgba($primary-color, 0.1);
-        border-left: 3px solid $primary-color;
-      }
+      .notification-dropdown {
+        position: absolute;
+        top: 50px;
+        right: -20px;
+        width: 280px;
+        max-height: 400px;
+        overflow-y: auto;
+        background-color: $surface-color;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: $border-radius;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+        z-index: 1000;
 
-      &.read {
-        opacity: 0.6;
-      }
+        .notification-item {
+          padding: 12px 15px;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+          cursor: pointer;
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
 
-      .notification-content {
-        font-size: 0.9rem;
-        color: $text-main;
-      }
+          &:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+          }
 
-      .notification-date {
-        font-size: 0.75rem;
-        color: $text-secondary;
-        align-self: flex-end;
-      }
-    }
+          &.unread {
+            background-color: rgba($primary-color, 0.1);
+            border-left: 3px solid $primary-color;
+          }
 
-    .no-notifications {
-      padding: 20px;
-      text-align: center;
-      color: $text-secondary;
-      font-style: italic;
+          &.read {
+            opacity: 0.6;
+          }
+
+          .notification-content {
+            font-size: 0.9rem;
+            color: $text-main;
+          }
+
+          .notification-date {
+            font-size: 0.75rem;
+            color: $text-secondary;
+            align-self: flex-end;
+          }
+        }
+
+        .no-notifications {
+          padding: 20px;
+          text-align: center;
+          color: $text-secondary;
+          font-style: italic;
+        }
+      }
     }
   }
 }
