@@ -14,6 +14,11 @@ export const AuthProvider = ({children}) => {
         return user ? JSON.parse(user) : null;
     });
 
+    const [notifications, setNotifications] = useState(() => {
+        const newNotifications = localStorage.getItem("notifications");
+        return newNotifications ? JSON.parse(newNotifications) : [];
+    });
+
     useEffect(() => {
         localStorage.setItem("users", JSON.stringify(allUsers));
     }, [allUsers]);
@@ -25,6 +30,10 @@ export const AuthProvider = ({children}) => {
             localStorage.removeItem("current-user");
         }
     }, [currentUser]);
+
+    useEffect(() => {
+        localStorage.setItem("notifications", JSON.stringify(notifications));
+    }, [notifications]);
 
     const login = (username, password) => {
         const passwordHash = btoa(password);
@@ -49,7 +58,9 @@ export const AuthProvider = ({children}) => {
             "name": name,
             "surname": surname,
             "avatar": avatar || "https://www.gravatar.com/avatar/?d=mp&s=256",
-            "friends": []
+            "friends": [],
+            "followers": [],
+            "following": []
         }
 
         updateUsers([...allUsers, newUser]);
@@ -62,12 +73,67 @@ export const AuthProvider = ({children}) => {
         return true;
     }
 
+    const toggleFollow = (targetUserId) => {
+        if (!currentUser) return;
+
+        const isFollowing = currentUser.following.includes(targetUserId);
+
+        const updatedUsers = allUsers.map(user => {
+            if (user.id === currentUser.id) {
+                let newFollowing;
+                if (isFollowing) {
+                    newFollowing = user.following.filter(id => id !== targetUserId);
+                } else {
+                    newFollowing = [...user.following, targetUserId];
+                }
+                return { ...user, following: newFollowing };
+            }
+
+            if (user.id === targetUserId) {
+                let newFollowers;
+                if (isFollowing) {
+                    newFollowers = user.followers.filter(id => id !== currentUser.id);
+                } else {
+                    newFollowers = [...user.followers, currentUser.id];
+                }
+                return { ...user, followers: newFollowers };
+            }
+
+            return user;
+        });
+
+        updateUsers(updatedUsers);
+        const updatedCurrentUser = updatedUsers.find(u => u.id === currentUser.id);
+        setCurrentUser(updatedCurrentUser);
+    };
+
+    const sendNotification = (receiverId, content) => {
+        const notification = {
+            "id": Date.now(),
+            "receiverId": receiverId,
+            "content": content,
+            "isRead": false,
+            "date": new Date().toISOString(),
+        }
+
+        setNotifications(prevNotifications => [notification, ...prevNotifications]);
+    }
+
+    const markAsRead = (id) => {
+        setNotifications(prev => prev.map(n =>
+            n.id === id ? {...n, isRead: true} : n
+        ));
+    }
+
     const value = {
         allUsers,
         currentUser,
         login,
         logout,
-        register
+        register,
+        notifications,
+        sendNotification,
+        markAsRead
     }
 
     return (

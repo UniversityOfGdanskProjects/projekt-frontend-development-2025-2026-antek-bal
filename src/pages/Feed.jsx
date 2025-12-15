@@ -7,7 +7,7 @@ import "./Feed.scss";
 
 
 function Feed() {
-    const {currentUser, allUsers} = useAuth();
+    const {currentUser, allUsers, sendNotification} = useAuth();
     const [allPosts, updatePosts] = useState(() => {
         const savedPosts = localStorage.getItem("feed-posts");
 
@@ -20,6 +20,12 @@ function Feed() {
     const handleAddPost = (newPost) => {
         const postLikes = {...newPost, likedBy: []}
         updatePosts([...allPosts, postLikes]);
+
+        if (currentUser.followers) {
+            currentUser.followers.forEach(followerId => {
+                sendNotification(followerId, `${currentUser.name} just uploaded a new post!`);
+            })
+        }
     }
 
     const handleToggleLike = (postId) => {
