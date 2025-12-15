@@ -108,13 +108,15 @@ export const AuthProvider = ({children}) => {
         setCurrentUser(updatedCurrentUser);
     };
 
-    const sendNotification = (receiverId, content) => {
+    const sendNotification = (receiverId, content, type="info", referenceId=null) => {
         const notification = {
             "id": Date.now(),
             "receiverId": receiverId,
             "content": content,
             "isRead": false,
             "date": new Date().toISOString(),
+            "type": type,
+            "referenceId": referenceId
         }
 
         setNotifications(prevNotifications => [notification, ...prevNotifications]);
