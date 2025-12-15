@@ -96,6 +96,12 @@ export const AuthProvider = ({children}) => {
                     newFollowers = user.followers.filter(id => id !== currentUser.id);
                 } else {
                     newFollowers = [...user.followers, currentUser.id];
+                    sendNotification(
+                        user.id,
+                        `${currentUser.name} started following you!`,
+                        "follow",
+                        currentUser.id
+                    );
                 }
                 return { ...user, followers: newFollowers };
             }
@@ -108,13 +114,17 @@ export const AuthProvider = ({children}) => {
         setCurrentUser(updatedCurrentUser);
     };
 
-    const sendNotification = (receiverId, content) => {
+    const sendNotification = (receiverId, content, type="info", referenceId=null) => {
+        const senderId = currentUser ? currentUser.id : null;
         const notification = {
             "id": Date.now(),
+            "senderId": senderId,
             "receiverId": receiverId,
             "content": content,
             "isRead": false,
             "date": new Date().toISOString(),
+            "type": type,
+            "referenceId": referenceId
         }
 
         setNotifications(prevNotifications => [notification, ...prevNotifications]);
@@ -144,7 +154,13 @@ export const AuthProvider = ({children}) => {
         });
 
         updateUsers(updatedUsers);
-        sendNotification(targetUserId, `${currentUser.name} ${currentUser.surname} sent you a friend request!`);
+        sendNotification(
+            targetUserId,
+            `${currentUser.name} ${currentUser.surname} sent you a friend request!`,
+            "friend",
+            currentUser.id
+        )
+
     };
 
     const acceptFriendRequest = (senderId) => {
@@ -173,7 +189,12 @@ export const AuthProvider = ({children}) => {
         const updatedCurrentUser = updatedUsers.find(u => u.id === currentUser.id);
         setCurrentUser(updatedCurrentUser);
 
-        sendNotification(senderId, `${currentUser.name} accepted your friend request!`);
+        sendNotification(
+            senderId,
+            `${currentUser.name} accepted your friend request!`,
+            "friend",
+            currentUser.id
+        );
     };
 
     const declineFriendRequest = (senderId) => {

@@ -1,10 +1,11 @@
-import {Link} from "react-router-dom"
+import {Link, useNavigate} from "react-router-dom"
 import {useAuth} from "../context/AuthContext.jsx"
 import {FaBell, FaSearch} from "react-icons/fa";
 import "./Navbar.scss"
 import {useState} from "react";
 
 function Navbar() {
+    const navigate = useNavigate();
     const {allUsers, currentUser, logout, notifications, markAsRead} = useAuth();
     const [showNotifications, setShowNotifications] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
@@ -22,6 +23,35 @@ function Navbar() {
 
     const handleUserClick = () => {
         setSearchQuery("");
+    }
+
+    const handleNotification = (notification) => {
+        markAsRead(notification.id);
+        setShowNotifications(false);
+
+        let targetUserId;
+
+        if (notification.type === "post") {
+            targetUserId = notification.senderId;
+        } else if (notification.type === "follow" || notification.type === "friend") {
+            targetUserId = notification.senderId;
+        } else {
+            targetUserId = currentUser.id;
+        }
+
+        navigate(`/profile/${targetUserId}`)
+
+        if (["post", "like", "comment"].includes(notification.type)) {
+            setTimeout(() => {
+                const element = document.getElementById(`post-${notification.referenceId}`);
+                if (element) {
+                    element.scrollIntoView({behavior: 'smooth', block: 'center'});
+                    element.style.transition = "border 0.5s";
+                    element.style.border = "2px solid #2196f3";
+                    setTimeout(() => element.style.border = "none", 2000);
+                }
+            }, 800)
+        }
     }
 
     return (
@@ -82,7 +112,7 @@ function Navbar() {
                                                 <div
                                                     key={n.id}
                                                     className={`notification-item ${n.isRead ? 'read' : 'unread'}`}
-                                                    onClick={() => markAsRead(n.id)}
+                                                    onClick={() => handleNotification(n)}
                                                 >
                                                     <div className="notification-content">{n.content}</div>
                                                     <div className="notification-date">{new Date(n.date).toLocaleString()}</div>

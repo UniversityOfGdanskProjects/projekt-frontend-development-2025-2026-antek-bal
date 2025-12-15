@@ -34,6 +34,7 @@ function CreatePostForm({onAddPost}) {
             media: selectedImage,
             date: new Date().toISOString(),
             likes: 0,
+            likedBy: [],
             comments: [],
             visibility: visibility
         }
