@@ -115,8 +115,10 @@ export const AuthProvider = ({children}) => {
     };
 
     const sendNotification = (receiverId, content, type="info", referenceId=null) => {
+        const senderId = currentUser ? currentUser.id : null;
         const notification = {
             "id": Date.now(),
+            "senderId": senderId,
             "receiverId": receiverId,
             "content": content,
             "isRead": false,

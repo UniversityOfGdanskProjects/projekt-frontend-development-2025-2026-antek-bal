@@ -29,12 +29,19 @@ function Navbar() {
         markAsRead(notification.id);
         setShowNotifications(false);
 
-        if (notification.type === "follow" || notification.type === "friend") {
-            navigate(`/profile/${notification.referenceId}`)
-        }
-        if (notification.type === "post" || notification.type === "like" || notification.type === "comment") {
-            navigate(`/profile/${currentUser.id}`)
+        let targetUserId;
 
+        if (notification.type === "post") {
+            targetUserId = notification.senderId;
+        } else if (notification.type === "follow" || notification.type === "friend") {
+            targetUserId = notification.senderId;
+        } else {
+            targetUserId = currentUser.id;
+        }
+
+        navigate(`/profile/${targetUserId}`)
+
+        if (["post", "like", "comment"].includes(notification.type)) {
             setTimeout(() => {
                 const element = document.getElementById(`post-${notification.referenceId}`);
                 if (element) {
@@ -43,8 +50,7 @@ function Navbar() {
                     element.style.border = "2px solid #2196f3";
                     setTimeout(() => element.style.border = "none", 2000);
                 }
-            }, 600)
-
+            }, 800)
         }
     }
 
