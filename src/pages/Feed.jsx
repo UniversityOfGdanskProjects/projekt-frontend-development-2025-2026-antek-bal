@@ -5,14 +5,13 @@ import {useAuth} from "../context/AuthContext.jsx";
 import {posts} from "../data/mockData";
 import "./Feed.scss";
 
-
 function Feed() {
     const {currentUser, allUsers, sendNotification} = useAuth();
     const [allPosts, updatePosts] = useState(() => {
         const savedPosts = localStorage.getItem("feed-posts");
-
         return savedPosts ? JSON.parse(savedPosts) : posts;
     });
+
     useEffect(() => {
         localStorage.setItem('feed-posts', JSON.stringify(allPosts));
     }, [allPosts]);
@@ -23,7 +22,12 @@ function Feed() {
 
         if (currentUser.followers) {
             currentUser.followers.forEach(followerId => {
-                sendNotification(followerId, `${currentUser.name} just uploaded a new post!`);
+                sendNotification(
+                    followerId,
+                    `${currentUser.name} just uploaded a new post!`,
+                    "post",
+                    newPost.id
+                );
             })
         }
     }
@@ -41,6 +45,15 @@ function Feed() {
                     newLikedBy = currentLikes.filter(id => id !== currentUser.id);
                 } else {
                     newLikedBy = [...currentLikes, currentUser.id];
+
+                    if (post.author !== currentUser.id) {
+                        sendNotification(
+                            post.author,
+                            `${currentUser.name} liked your post!`,
+                            "like",
+                            post.id
+                        );
+                    }
                 }
 
                 return { ...post, likedBy: newLikedBy };
@@ -59,7 +72,6 @@ function Feed() {
     }
 
     const sortedPosts = [...filteredPosts].sort((a, b) => new Date(b.date) - new Date(a.date));
-
 
     return (
         <div className="feed-page">

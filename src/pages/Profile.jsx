@@ -7,7 +7,16 @@ import "./Profile.scss";
 
 function Profile() {
     const {userId} = useParams();
-    const {allUsers, currentUser, toggleFollow, sendFriendRequest, acceptFriendRequest, declineFriendRequest, removeFriend} = useAuth();
+    const {
+        allUsers,
+        currentUser,
+        toggleFollow,
+        sendFriendRequest,
+        acceptFriendRequest,
+        declineFriendRequest,
+        removeFriend,
+        sendNotification
+    } = useAuth();
 
     const [allPosts, setAllPosts] = useState(() => {
         const savedPosts = localStorage.getItem("feed-posts");
@@ -37,6 +46,15 @@ function Profile() {
                     newLikedBy = currentLikes.filter(id => id !== currentUser.id);
                 } else {
                     newLikedBy = [...currentLikes, currentUser.id]
+
+                    if (post.author !== currentUser.id) {
+                        sendNotification(
+                            post.author,
+                            `${currentUser.name} liked your post!`,
+                            "like",
+                            post.id
+                        )
+                    }
                 }
 
                 return {...post, likedBy: newLikedBy};
@@ -49,17 +67,17 @@ function Profile() {
 
     let filteredPosts;
     if (currentUser) {
-        filteredPosts = allPosts.filter(p => (p.visibility === "public" || (p.visibility === "friends" && currentUser.friends.includes(p.author)) || p.author === currentUser.id));
+        filteredPosts = allPosts.filter(p => (p.visibility === "public" || (p.visibility === "friends" && currentUser.friends?.includes(p.author)) || p.author === currentUser.id));
     } else {
         filteredPosts = allPosts.filter(p => p.visibility === "public");
     }
     const userPosts = [...filteredPosts].filter(p => p.author === user.id);
     const sortedPosts = [...userPosts].sort((a, b) => new Date(b.date) - new Date(a.date));
 
-    const isFriend = currentUser && currentUser.friends.includes(user.id)
-    const hasSentRequest = currentUser && user.friendRequests.includes(currentUser.id)
-    const hasReceivedRequest = currentUser && currentUser.friendRequests.includes(user.id)
-    const isMe = currentUser && currentUser.id === user.id
+    const isMe = currentUser?.id === user.id;
+    const isFriend = currentUser?.friends?.includes(user.id);
+    const hasSentRequest = user.friendRequests?.includes(currentUser?.id);
+    const hasReceivedRequest = currentUser?.friendRequests?.includes(user.id);
 
     return (
         <div className="profile-page">

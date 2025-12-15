@@ -5,7 +5,7 @@ import "./Navbar.scss"
 import {useState} from "react";
 
 function Navbar() {
-    const maps = useNavigate();
+    const navigate = useNavigate();
     const {allUsers, currentUser, logout, notifications, markAsRead} = useAuth();
     const [showNotifications, setShowNotifications] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
@@ -30,7 +30,21 @@ function Navbar() {
         setShowNotifications(false);
 
         if (notification.type === "follow" || notification.type === "friend") {
-            maps(`/profile/${notification.referenceId}`)
+            navigate(`/profile/${notification.referenceId}`)
+        }
+        if (notification.type === "post" || notification.type === "like" || notification.type === "comment") {
+            navigate(`/profile/${currentUser.id}`)
+
+            setTimeout(() => {
+                const element = document.getElementById(`post-${notification.referenceId}`);
+                if (element) {
+                    element.scrollIntoView({behavior: 'smooth', block: 'center'});
+                    element.style.transition = "border 0.5s";
+                    element.style.border = "2px solid #2196f3";
+                    setTimeout(() => element.style.border = "none", 2000);
+                }
+            }, 600)
+
         }
     }
 
