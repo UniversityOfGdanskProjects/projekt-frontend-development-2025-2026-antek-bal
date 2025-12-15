@@ -10,7 +10,7 @@ function PostCard({post, author, onToggleLike}) {
     const likeCount = (post.likedBy || []).length + (post.likes || 0)
 
     return (
-        <div className="post-card">
+        <div className="post-card" id={`post-${post.id}`}>
             <div className="post-card-header">
                 <div className="post-card-header-left">
                     <Link to={`/profile/${post.author}`}><img className="avatar" src={author.avatar}
