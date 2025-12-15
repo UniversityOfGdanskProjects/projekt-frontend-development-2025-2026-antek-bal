@@ -7,7 +7,7 @@ import "./Profile.scss";
 
 function Profile() {
     const {userId} = useParams();
-    const {allUsers, currentUser} = useAuth();
+    const {allUsers, currentUser, toggleFollow, sendFriendRequest, acceptFriendRequest, declineFriendRequest, removeFriend} = useAuth();
 
     const [allPosts, setAllPosts] = useState(() => {
         const savedPosts = localStorage.getItem("feed-posts");
@@ -21,9 +21,7 @@ function Profile() {
     const user = allUsers.find((user) => user.id === Number(userId));
 
     if (!user) {
-        return (
-            <div className="profile-page">404 User not found</div>
-        );
+        return <div className="profile-page">404 User not found</div>;
     }
 
     const handleToggleLike = (postId) => {
@@ -58,6 +56,11 @@ function Profile() {
     const userPosts = [...filteredPosts].filter(p => p.author === user.id);
     const sortedPosts = [...userPosts].sort((a, b) => new Date(b.date) - new Date(a.date));
 
+    const isFriend = currentUser && currentUser.friends.includes(user.id)
+    const hasSentRequest = currentUser && user.friendRequests.includes(currentUser.id)
+    const hasReceivedRequest = currentUser && currentUser.friendRequests.includes(user.id)
+    const isMe = currentUser && currentUser.id === user.id
+
     return (
         <div className="profile-page">
             <div className="profile-header">
@@ -65,8 +68,36 @@ function Profile() {
 
                 <div className="profile-info">
                     <h1>{user.name} {user.surname}</h1>
-                    <p className="friends-count">{user.friends.length} friends</p>
+                    <div className="stats-row" style={{ color: '#888', marginBottom: '15px' }}>
+                        <span><strong>{user.friends?.length || 0}</strong> Friends</span>
+                        <span><strong>{user.followers?.length || 0}</strong> Followers</span>
+                    </div>
                 </div>
+
+                {currentUser && !isMe && (
+                    <div className="action-buttons">
+
+                        <button className="follow-btn profile-btn" onClick={() => toggleFollow(user.id)}>
+                            {currentUser.following?.includes(user.id) ? "Unfollow" : "Follow"}
+                        </button>
+
+                        {isFriend ? (
+                            <button className="remove-btn profile-btn" onClick={() => removeFriend(user.id)}>
+                                Remove Friend
+                            </button>
+                        ) : hasSentRequest ? (
+                            <button className="request-sent-btn profile-btn" disabled>Request Sent</button>
+                        ) : hasReceivedRequest ? (
+                            <>
+                                <button className="accept-btn profile-btn" onClick={() => acceptFriendRequest(user.id)}>Accept</button>
+                                <button className="decline-btn profile-btn" onClick={() => declineFriendRequest(user.id)}>Decline</button>
+                            </>
+                        ) : (
+                            <button className="add-btn profile-btn" onClick={() => sendFriendRequest(user.id)}>Add Friend</button>
+                        )}
+
+                    </div>
+                )}
             </div>
 
             <div className="profile-posts">
