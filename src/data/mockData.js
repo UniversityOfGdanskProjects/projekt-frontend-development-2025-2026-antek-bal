@@ -8,7 +8,8 @@ const users = [
         "avatar": "https://i.pravatar.cc/150?img=1",
         "friends": [2, 3],
         "followers": [2, 3],
-        "following": [2, 3]
+        "following": [2, 3],
+        "friendRequests": []
     },
     {
         "id": 2,
@@ -19,7 +20,8 @@ const users = [
         "avatar": "https://i.pravatar.cc/150?img=2",
         "friends": [1, 3],
         "followers": [1, 3],
-        "following": [1, 3]
+        "following": [1, 3],
+        "friendRequests": []
     },
     {
         "id": 3,
@@ -30,7 +32,8 @@ const users = [
         "avatar": "https://i.pravatar.cc/150?img=3",
         "friends": [1, 2],
         "followers": [1, 2],
-        "following": [1, 2]
+        "following": [1, 2],
+        "friendRequests": []
     }
 ]
 

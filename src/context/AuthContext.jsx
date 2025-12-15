@@ -60,7 +60,8 @@ export const AuthProvider = ({children}) => {
             "avatar": avatar || "https://www.gravatar.com/avatar/?d=mp&s=256",
             "friends": [],
             "followers": [],
-            "following": []
+            "following": [],
+            "friendRequests": []
         }
 
         updateUsers([...allUsers, newUser]);
@@ -125,6 +126,92 @@ export const AuthProvider = ({children}) => {
         ));
     }
 
+    const sendFriendRequest = (targetUserId) => {
+        if (!currentUser) return;
+
+        const targetUser = allUsers.find(u => u.id === targetUserId);
+        if (targetUser.friendRequests && targetUser.friendRequests.includes(currentUser.id)) return;
+        if (targetUser.friends && targetUser.friends.includes(currentUser.id)) return;
+
+        const updatedUsers = allUsers.map(user => {
+            if (user.id === targetUserId) {
+                return {
+                    ...user,
+                    friendRequests: [...(user.friendRequests || []), currentUser.id]
+                };
+            }
+            return user;
+        });
+
+        updateUsers(updatedUsers);
+        sendNotification(targetUserId, `${currentUser.name} ${currentUser.surname} sent you a friend request!`);
+    };
+
+    const acceptFriendRequest = (senderId) => {
+        if (!currentUser) return;
+
+        const updatedUsers = allUsers.map(user => {
+            if (user.id === currentUser.id) {
+                return {
+                    ...user,
+                    friendRequests: user.friendRequests.filter(id => id !== senderId),
+                    friends: [...user.friends, senderId]
+                };
+            }
+
+            if (user.id === senderId) {
+                return {
+                    ...user,
+                    friends: [...user.friends, currentUser.id]
+                };
+            }
+
+            return user;
+        });
+
+        updateUsers(updatedUsers);
+        const updatedCurrentUser = updatedUsers.find(u => u.id === currentUser.id);
+        setCurrentUser(updatedCurrentUser);
+
+        sendNotification(senderId, `${currentUser.name} accepted your friend request!`);
+    };
+
+    const declineFriendRequest = (senderId) => {
+        if (!currentUser) return;
+
+        const updatedUsers = allUsers.map(user => {
+            if (user.id === currentUser.id) {
+                return {
+                    ...user,
+                    friendRequests: user.friendRequests.filter(id => id !== senderId)
+                };
+            }
+            return user;
+        });
+
+        updateUsers(updatedUsers);
+        const updatedCurrentUser = updatedUsers.find(u => u.id === currentUser.id);
+        setCurrentUser(updatedCurrentUser);
+    };
+
+    const removeFriend = (friendId) => {
+        if (!currentUser) return;
+
+        const updatedUsers = allUsers.map(user => {
+            if (user.id === currentUser.id) {
+                return { ...user, friends: user.friends.filter(id => id !== friendId) };
+            }
+            if (user.id === friendId) {
+                return { ...user, friends: user.friends.filter(id => id !== currentUser.id) };
+            }
+            return user;
+        });
+
+        updateUsers(updatedUsers);
+        const updatedCurrentUser = updatedUsers.find(u => u.id === currentUser.id);
+        setCurrentUser(updatedCurrentUser);
+    };
+
     const value = {
         allUsers,
         currentUser,
@@ -133,7 +220,12 @@ export const AuthProvider = ({children}) => {
         register,
         notifications,
         sendNotification,
-        markAsRead
+        markAsRead,
+        toggleFollow,
+        sendFriendRequest,
+        acceptFriendRequest,
+        declineFriendRequest,
+        removeFriend
     }
 
     return (
