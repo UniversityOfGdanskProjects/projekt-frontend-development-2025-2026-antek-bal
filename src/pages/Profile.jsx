@@ -72,32 +72,35 @@ function Profile() {
                         <span><strong>{user.friends?.length || 0}</strong> Friends</span>
                         <span><strong>{user.followers?.length || 0}</strong> Followers</span>
                     </div>
-                </div>
 
-                {currentUser && !isMe && (
-                    <div className="action-buttons">
+                    {currentUser && !isMe && (
+                        <div className="action-buttons">
 
-                        <button className="follow-btn profile-btn" onClick={() => toggleFollow(user.id)}>
-                            {currentUser.following?.includes(user.id) ? "Unfollow" : "Follow"}
-                        </button>
-
-                        {isFriend ? (
-                            <button className="remove-btn profile-btn" onClick={() => removeFriend(user.id)}>
-                                Remove Friend
+                            <button
+                                className={`follow-btn profile-btn ${currentUser.following?.includes(user.id) ? 'following' : ''}`}
+                                onClick={() => toggleFollow(user.id)}
+                            >
+                                {currentUser.following?.includes(user.id) ? "Unfollow" : "Follow"}
                             </button>
-                        ) : hasSentRequest ? (
-                            <button className="request-sent-btn profile-btn" disabled>Request Sent</button>
-                        ) : hasReceivedRequest ? (
-                            <>
-                                <button className="accept-btn profile-btn" onClick={() => acceptFriendRequest(user.id)}>Accept</button>
-                                <button className="decline-btn profile-btn" onClick={() => declineFriendRequest(user.id)}>Decline</button>
-                            </>
-                        ) : (
-                            <button className="add-btn profile-btn" onClick={() => sendFriendRequest(user.id)}>Add Friend</button>
-                        )}
 
-                    </div>
-                )}
+                            {isFriend ? (
+                                <button className="remove-btn profile-btn" onClick={() => removeFriend(user.id)}>
+                                    Remove Friend
+                                </button>
+                            ) : hasSentRequest ? (
+                                <button className="request-sent-btn profile-btn" disabled>Request Sent</button>
+                            ) : hasReceivedRequest ? (
+                                <>
+                                    <button className="accept-btn profile-btn" onClick={() => acceptFriendRequest(user.id)}>Accept</button>
+                                    <button className="decline-btn profile-btn" onClick={() => declineFriendRequest(user.id)}>Decline</button>
+                                </>
+                            ) : (
+                                <button className="add-btn profile-btn" onClick={() => sendFriendRequest(user.id)}>Add Friend</button>
+                            )}
+
+                        </div>
+                    )}
+                </div>
             </div>
 
             <div className="profile-posts">
