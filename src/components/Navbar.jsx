@@ -1,10 +1,11 @@
-import {Link} from "react-router-dom"
+import {Link, useNavigate} from "react-router-dom"
 import {useAuth} from "../context/AuthContext.jsx"
 import {FaBell, FaSearch} from "react-icons/fa";
 import "./Navbar.scss"
 import {useState} from "react";
 
 function Navbar() {
+    const maps = useNavigate();
     const {allUsers, currentUser, logout, notifications, markAsRead} = useAuth();
     const [showNotifications, setShowNotifications] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
@@ -22,6 +23,15 @@ function Navbar() {
 
     const handleUserClick = () => {
         setSearchQuery("");
+    }
+
+    const handleNotification = (notification) => {
+        markAsRead(notification.id);
+        setShowNotifications(false);
+
+        if (notification.type === "follow" || notification.type === "friend") {
+            maps(`/profile/${notification.referenceId}`)
+        }
     }
 
     return (
@@ -82,7 +92,7 @@ function Navbar() {
                                                 <div
                                                     key={n.id}
                                                     className={`notification-item ${n.isRead ? 'read' : 'unread'}`}
-                                                    onClick={() => markAsRead(n.id)}
+                                                    onClick={() => handleNotification(n)}
                                                 >
                                                     <div className="notification-content">{n.content}</div>
                                                     <div className="notification-date">{new Date(n.date).toLocaleString()}</div>
