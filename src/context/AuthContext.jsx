@@ -60,7 +60,8 @@ export const AuthProvider = ({children}) => {
             "avatar": avatar || "https://www.gravatar.com/avatar/?d=mp&s=256",
             "friends": [],
             "followers": [],
-            "following": []
+            "following": [],
+            "friendRequests": []
         }
 
         updateUsers([...allUsers, newUser]);
