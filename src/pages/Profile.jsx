@@ -124,7 +124,7 @@ function Profile() {
 
                     {currentUser && isMe ? (
                         <div className="action-buttons">
-                            <button className="edit-profile-btn" onClick={() => {setIsEditing(true)}}>Edit Profile</button>
+                            <button className="edit-profile-btn profile-btn" onClick={() => {setIsEditing(true)}}>Edit Profile</button>
                         </div>
                     ) : ( currentUser &&
                         <div className="action-buttons">

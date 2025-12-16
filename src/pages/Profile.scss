@@ -68,9 +68,15 @@
           display: flex;
           align-items: center;
           justify-content: center;
+        }
 
-          &:active {
-            transform: scale(0.95);
+        .edit-profile-btn {
+          background-color: #333;
+          color: white;
+          border: none;
+
+          &:hover {
+            background-color: #444;
           }
         }
 

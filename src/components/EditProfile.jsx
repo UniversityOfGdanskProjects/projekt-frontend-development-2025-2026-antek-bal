@@ -1,8 +1,9 @@
 import {useState} from "react";
 import {useAuth} from "../context/AuthContext.jsx";
 import {useNavigate} from "react-router-dom";
+import "./EditProfile.scss";
 
-function EditProfile() {
+function EditProfile({onClose}) {
     const {currentUser, updateProfile} = useAuth();
     const [step, setStep] = useState(1);
     const navigate = useNavigate();
@@ -42,6 +43,8 @@ function EditProfile() {
         }
 
         updateProfile(currentUser.id, data);
+
+        if (onClose) {onClose()}
         navigate(`/profile/${currentUser.id}`);
     };
 
