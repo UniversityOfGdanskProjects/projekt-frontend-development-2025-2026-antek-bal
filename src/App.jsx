@@ -10,19 +10,17 @@ function App() {
     return (
         <Layout>
             <Routes>
-                <Route path="/">
+                <Route path="/" element={
                     <ProtectedRoute>
                         <Feed/>
                     </ProtectedRoute>
-                </Route>
-                <Route path="/login">
-                        <Login/>
-                </Route>
-                <Route path="/profile/:userId">
+                }></Route>
+                <Route path="/login" element={<Login/>}/>
+                <Route path="/profile/:userId" element={
                     <ProtectedRoute>
                         <Profile/>
                     </ProtectedRoute>
-                </Route>
+                }></Route>
             </Routes>
         </Layout>
     );
