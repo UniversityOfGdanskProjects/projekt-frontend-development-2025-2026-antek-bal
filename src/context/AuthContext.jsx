@@ -233,6 +233,21 @@ export const AuthProvider = ({children}) => {
         setCurrentUser(updatedCurrentUser);
     };
 
+    const updateProfile = (userId, updatedData) => {
+        const updatedUser = allUsers.map(user => {
+            if (user.id === userId) {
+                return { ...user, ...updatedData}
+            }
+            return user;
+        })
+
+        updateUsers(updatedUser);
+
+        if (currentUser && currentUser.id === userId) {
+            setCurrentUser(prev => ({ ...prev, ...updatedData }));
+        }
+    }
+
     const value = {
         allUsers,
         currentUser,
@@ -246,7 +261,8 @@ export const AuthProvider = ({children}) => {
         sendFriendRequest,
         acceptFriendRequest,
         declineFriendRequest,
-        removeFriend
+        removeFriend,
+        updateProfile
     }
 
     return (
