@@ -1,6 +1,7 @@
 import {useState, useEffect} from "react";
 import {useParams} from "react-router-dom";
 import PostCard from "../components/PostCard.jsx";
+import EditProfile from "../components/EditProfile.jsx";
 import {useAuth} from "../context/AuthContext";
 import {posts as initialPosts} from "../data/mockData.js";
 import "./Profile.scss";
@@ -22,6 +23,8 @@ function Profile() {
         const savedPosts = localStorage.getItem("feed-posts");
         return savedPosts ? JSON.parse(savedPosts) : initialPosts;
     });
+
+    const [isEditing, setIsEditing] = useState(false);
 
     useEffect(() => {
         localStorage.setItem("feed-posts", JSON.stringify(allPosts));
@@ -119,7 +122,11 @@ function Profile() {
                         <span><strong>{user.followers?.length || 0}</strong> Followers</span>
                     </div>
 
-                    {currentUser && !isMe && (
+                    {currentUser && isMe ? (
+                        <div className="action-buttons">
+                            <button className="edit-profile-btn" onClick={() => {setIsEditing(true)}}>Edit Profile</button>
+                        </div>
+                    ) : ( currentUser &&
                         <div className="action-buttons">
 
                             <button
@@ -143,7 +150,6 @@ function Profile() {
                             ) : (
                                 <button className="add-btn profile-btn" onClick={() => sendFriendRequest(user.id)}>Add Friend</button>
                             )}
-
                         </div>
                     )}
                 </div>
@@ -164,6 +170,9 @@ function Profile() {
                     <p>No posts yet.</p>
                 )}
             </div>
+            {isEditing && (
+                <EditProfile onClose={() => setIsEditing(false)} />
+            )}
         </div>
     );
 }
