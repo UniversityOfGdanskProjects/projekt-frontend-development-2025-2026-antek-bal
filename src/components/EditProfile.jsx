@@ -4,7 +4,7 @@ import {useNavigate} from "react-router-dom";
 
 function EditProfile() {
     const {currentUser, updateProfile} = useAuth();
-    const [step, setStep] = useState(0);
+    const [step, setStep] = useState(1);
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         "id": currentUser.id,
