@@ -2,12 +2,17 @@ import {Link} from "react-router-dom";
 import {FaHeart, FaRegComment, FaShare} from "react-icons/fa";
 import {useAuth} from "../context/AuthContext.jsx";
 import "./PostCard.scss";
+import {useState} from "react";
 
 function PostCard({post, author, onToggleLike}) {
     const {currentUser} = useAuth();
 
     const isLiked = currentUser && (post.likedBy || []).includes(currentUser.id);
     const likeCount = (post.likedBy || []).length + (post.likes || 0)
+
+    const [isComment, setIsComment] = useState(false)
+    const [commentText, setCommentText] = useState("");
+
 
     return (
         <div className="post-card" id={`post-${post.id}`}>
