@@ -79,6 +79,34 @@ function Profile() {
     const hasSentRequest = user.friendRequests?.includes(currentUser?.id);
     const hasReceivedRequest = currentUser?.friendRequests?.includes(user.id);
 
+    const handleAddComment = (postId, content) => {
+        if (!currentUser) return;
+
+        const updatedPosts = allPosts.map(p => {
+            if (p.id === postId) {
+                const newComment = {
+                    "author": currentUser.id,
+                    "description": content,
+                    "date": new Date().toISOString()
+                };
+
+                if (p.author !== currentUser.id) {
+                    sendNotification(
+                        p.author,
+                        `${currentUser.name} commented on your post`,
+                        "comment",
+                        p.id
+                    );
+                }
+
+                return {...p, comments: [...(p.comments || []), newComment]};
+            }
+            return p;
+        });
+
+        setAllPosts(updatedPosts);
+    }
+
     return (
         <div className="profile-page">
             <div className="profile-header">
