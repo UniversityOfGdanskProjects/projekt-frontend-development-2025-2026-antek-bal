@@ -40,7 +40,7 @@ function PostCard({post, author, onToggleLike, onAddComment}) {
             </div>
             <div className="post-card-actions">
                 <div className={`like ${isLiked ? 'active' : ''}`} onClick={() => onToggleLike(post.id)}><FaHeart/>{likeCount}</div>
-                <div className="comment-btn" onClick={() =>setIsComment(!isComment)}><FaRegComment/>{post.comments.length}</div>
+                <div className="comment" onClick={() =>setIsComment(!isComment)}><FaRegComment/>{post.comments.length}</div>
                 <div className="share"><FaShare/></div>
             </div>
             {isComment && (
@@ -56,7 +56,7 @@ function PostCard({post, author, onToggleLike, onAddComment}) {
                             }
 
                             return (
-                                <div className="comment" key={index}>
+                                <div className="comment-item" key={index}>
                                     <img src={user.avatar} className="avatar" alt="avatar"/>
                                     <div className="author-name">{user.name} {user.surname}</div>
                                     <div className="content">{content}</div>
@@ -69,7 +69,7 @@ function PostCard({post, author, onToggleLike, onAddComment}) {
                 </div>
                 <form onSubmit={(e) => {
                     e.preventDefault();
-                    onAddComment(post.id, currentUser.id, commentText);
+                    onAddComment(post.id, commentText);
                     setCommentText("");
                     }}>
                     <div className="comment-form">

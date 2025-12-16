@@ -157,6 +157,7 @@ function Profile() {
                             post={post}
                             author={user}
                             onToggleLike={handleToggleLike}
+                            onAddComment={handleAddComment}
                         />
                     ))
                 ) : (
