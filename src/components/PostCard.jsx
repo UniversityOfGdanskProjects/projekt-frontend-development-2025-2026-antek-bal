@@ -4,8 +4,8 @@ import {useAuth} from "../context/AuthContext.jsx";
 import "./PostCard.scss";
 import {useState} from "react";
 
-function PostCard({post, author, onToggleLike}) {
-    const {currentUser} = useAuth();
+function PostCard({post, author, onToggleLike, onAddComment}) {
+    const {currentUser, allUsers} = useAuth();
 
     const isLiked = currentUser && (post.likedBy || []).includes(currentUser.id);
     const likeCount = (post.likedBy || []).length + (post.likes || 0)
@@ -40,11 +40,31 @@ function PostCard({post, author, onToggleLike}) {
             </div>
             <div className="post-card-actions">
                 <div className={`like ${isLiked ? 'active' : ''}`} onClick={() => onToggleLike(post.id)}><FaHeart/>{likeCount}</div>
-                <div className="comment"><FaRegComment/>{post.comments.length}</div>
+                <div className="comment" onClick={() => { isComment ? setIsComment(true) : setIsComment(false)}}><FaRegComment/>{post.comments.length}</div>
                 <div className="share"><FaShare/></div>
             </div>
+            {isComment && (
+                <div className="post-comments">
+                    {post.comments.length > 0 ? (
+                        post.comments.map((comment, index) => {
+                            const user = allUsers.find(u => u.id === comment.author);
+                            const content = comment.description
+
+                            return (
+                                <div className="comment" key={index}>
+                                    <img src={user.avatar} className="avatar" alt="avatar"/>
+                                    <div className="author-name">{user.name} {user.surname}</div>
+                                    <div className="content">{content}</div>
+                                </div>
+                            )
+                        })
+                    ) : (
+                        <div className="no-comments">No comments</div>
+                    )}
+                </div>
+            )}
         </div>
-    );
+    )
 }
 
 export default PostCard;
