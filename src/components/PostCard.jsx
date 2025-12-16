@@ -1,8 +1,9 @@
 import {Link} from "react-router-dom";
+import {useState} from "react";
 import {FaHeart, FaRegComment, FaShare} from "react-icons/fa";
 import {useAuth} from "../context/AuthContext.jsx";
 import "./PostCard.scss";
-import {useState} from "react";
+
 
 function PostCard({post, author, onToggleLike, onAddComment}) {
     const {currentUser, allUsers} = useAuth();
