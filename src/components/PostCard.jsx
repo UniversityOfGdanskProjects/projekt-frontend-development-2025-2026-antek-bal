@@ -60,8 +60,8 @@ function PostCard({post, author, onToggleLike, onAddComment}) {
 
                                 return (
                                     <div className="comment-item" key={index}>
-                                        <img src={user.avatar} className="avatar" alt="avatar"/>
-                                        <div className="author-name">{user.name} {user.surname}</div>
+                                        <Link to={`/profile/${user.id}`} className="link-avatar"><img src={user.avatar} className="avatar" alt="avatar"/></Link>
+                                        <Link to={`/profile/${user.id}`} className="link-name"><div className="author-name">{user.name} {user.surname}</div></Link>
                                         <div className="content">{content}</div>
                                     </div>
                                 )
