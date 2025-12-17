@@ -18,6 +18,31 @@ export const ChatProvider = ({children}) => {
         localStorage.setItem("chat-messages", JSON.stringify(messages));
     }, [messages]);
 
+    useEffect(() => {
+        if (!currentUser) return;
+
+        const interval = setInterval(() => {
+            if (Math.random() > 0.9) {
+                const randomUserId = Math.floor(Math.random() * 3) + 1;
+
+                if (randomUserId !== currentUser.id) {
+                    const fakeMsg = {
+                        id: Date.now(),
+                        senderId: randomUserId,
+                        receiverId: currentUser.id,
+                        content: "Hi this is fake message (" + new Date().toLocaleTimeString() + ")",
+                        timestamp: new Date().toISOString(),
+                        isRead: false
+                    };
+
+                    setMessages(prev => [...prev, fakeMsg]);
+                }
+            }
+        }, 5000);
+
+        return () => clearInterval(interval);
+    }, [currentUser]);
+
     const sendMessage = (receiverId, content) => {
         if (!currentUser) return;
 
