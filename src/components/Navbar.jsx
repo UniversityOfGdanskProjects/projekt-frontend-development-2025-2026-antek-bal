@@ -63,7 +63,7 @@ function Navbar() {
             <div className="nav-center">
                 {currentUser && (
                     <div className="search-bar">
-                        <FaSearch className="search-icon" />
+                        <FaSearch className="search-icon"/>
                         <input
                             type="text"
                             placeholder="Search people..."
@@ -80,7 +80,7 @@ function Navbar() {
                                         className="search-item"
                                         onClick={handleUserClick}
                                     >
-                                        <img src={user.avatar} alt="avatar" />
+                                        <img src={user.avatar} alt="avatar"/>
                                         <div className="user-info">
                                             <span className="name">{user.name} {user.surname}</span>
                                             <span className="username">@{user.username}</span>
@@ -101,7 +101,7 @@ function Navbar() {
                                     className="notification-btn"
                                     onClick={() => setShowNotifications(!showNotifications)}
                                 >
-                                    <FaBell />
+                                    <FaBell/>
                                     {unreadCount > 0 && <span className="badge">{unreadCount}</span>}
                                 </button>
 
@@ -115,7 +115,8 @@ function Navbar() {
                                                     onClick={() => handleNotification(n)}
                                                 >
                                                     <div className="notification-content">{n.content}</div>
-                                                    <div className="notification-date">{new Date(n.date).toLocaleString()}</div>
+                                                    <div
+                                                        className="notification-date">{new Date(n.date).toLocaleString()}</div>
                                                 </div>
                                             ))
                                         ) : (
@@ -125,7 +126,9 @@ function Navbar() {
                                 )}
                             </li>
                             <li><Link to={`/profile/${currentUser.id}`}>Profile</Link></li>
-                            <li><button onClick={logout}>Logout</button></li>
+                            <li>
+                                <button onClick={logout}>Logout</button>
+                            </li>
                         </>
                     ) :
                     <li><Link to="/login">Login</Link></li>

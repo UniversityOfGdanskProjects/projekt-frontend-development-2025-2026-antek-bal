@@ -56,7 +56,7 @@ function Feed() {
                     }
                 }
 
-                return { ...post, likedBy: newLikedBy };
+                return {...post, likedBy: newLikedBy};
             }
             return post;
         });
@@ -101,6 +101,27 @@ function Feed() {
         updatePosts(updatedPosts);
     }
 
+    const handleDeleteComment = (postId, commentId) => {
+        if (!currentUser) return;
+
+        const updatedPosts = allPosts.map(p => {
+            if (p.id === postId) {
+                const newComments = p.comments.filter((_, i) => i!== commentId);
+
+                return {...p, comments: newComments};
+            }
+            return p;
+        })
+
+        updatePosts(updatedPosts);
+    }
+
+    const handleDeletePost = (postId) => {
+        if (!currentUser) return;
+        const updatedPosts = allPosts.filter(p => p.id !== postId);
+        updatePosts(updatedPosts);
+    }
+
     return (
         <div className="feed-page">
             <h1>Wall</h1>
@@ -118,6 +139,8 @@ function Feed() {
                             author={author}
                             onToggleLike={handleToggleLike}
                             onAddComment={handleAddComment}
+                            onDeleteComment={handleDeleteComment}
+                            onDeletePost={handleDeletePost}
                         />
                     )
                 })}

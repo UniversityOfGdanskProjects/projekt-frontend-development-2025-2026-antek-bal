@@ -51,10 +51,25 @@
       }
     }
 
-    .visibility {
-      font-size: 0.8rem;
-      color: $text-secondary;
-      text-transform: uppercase;
+    .post-card-header-right {
+      display: flex;
+      gap: 24px;
+      align-items: flex-start;
+
+      .visibility {
+        font-size: 0.8rem;
+        color: $text-secondary;
+        text-transform: uppercase;
+      }
+
+      .icon {
+        cursor: pointer;
+        transition: color 0.5s;
+
+        &:hover{
+          color: $text-secondary;
+        }
+      }
     }
   }
 
@@ -126,14 +141,21 @@
     .comment-item {
       display: grid;
       grid-template-areas:
-        "avatar name"
-        "avatar content";
+        "link-avatar link-name"
+        "link-avatar content";
       grid-template-columns: 40px 1fr;
       column-gap: 10px;
       row-gap: 2px;
 
+      .link-avatar{
+        grid-area: link-avatar;
+      }
+
+      .link-name {
+        grid-area: link-name;
+      }
+
       .avatar {
-        grid-area: avatar;
         width: 36px;
         height: 36px;
         border-radius: 50%;
@@ -142,7 +164,6 @@
       }
 
       .author-name {
-        grid-area: name;
         font-weight: bold;
         font-size: 0.9rem;
         color: $primary-color;
@@ -150,14 +171,28 @@
       }
 
       .content {
-        grid-area: content;
-        font-size: 0.95rem;
-        color: $text-main;
         background-color: rgba(255, 255, 255, 0.05);
         padding: 8px 12px;
         border-radius: 0 12px 12px 12px;
-        margin-top: 2px;
-        word-break: break-word;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .content-text {
+          grid-area: content;
+          font-size: 0.95rem;
+          color: $text-main;
+          word-break: break-word;
+        }
+
+        .content-icon {
+          cursor: pointer;
+          transition: color 0.5s;
+
+          &:hover{
+            color: $text-secondary;
+          }
+        }
       }
     }
   }

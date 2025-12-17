@@ -35,7 +35,7 @@ function EditProfile({onClose}) {
     const handleSave = (e) => {
         e.preventDefault();
 
-        const data = { ...formData };
+        const data = {...formData};
         if (!data.password) {
             delete data.password;
         } else {
@@ -44,7 +44,9 @@ function EditProfile({onClose}) {
 
         updateProfile(currentUser.id, data);
 
-        if (onClose) {onClose()}
+        if (onClose) {
+            onClose()
+        }
         navigate(`/profile/${currentUser.id}`);
     };
 
@@ -87,7 +89,8 @@ function EditProfile({onClose}) {
                     <div className="step-content">
                         <h1>Profile Picture (Step 2/3)</h1>
                         <div className="avatar-preview">
-                            <img src={preview} alt="Avatar Preview" style={{width: '100px', height: '100px', borderRadius: '50%'}}/>
+                            <img src={preview} alt="Avatar Preview"
+                                 style={{width: '100px', height: '100px', borderRadius: '50%'}}/>
                         </div>
                         <input
                             type="file"
@@ -120,7 +123,8 @@ function EditProfile({onClose}) {
                     {step < 3 ? (
                         <button type="button" onClick={nextStep}>Next</button>
                     ) : (
-                        <button type="button" onClick={handleSave} style={{backgroundColor: '#00e676'}}>Save Changes</button>
+                        <button type="button" onClick={handleSave} style={{backgroundColor: '#00e676'}}>Save
+                            Changes</button>
                     )}
                 </div>
 

@@ -110,6 +110,27 @@ function Profile() {
         setAllPosts(updatedPosts);
     }
 
+    const handleDeleteComment = (postId, commentId) => {
+        if (!currentUser) return;
+
+        const updatedPosts = allPosts.map(p => {
+            if (p.id === postId) {
+                const newComments = p.comments.filter((_, i) => i!== commentId);
+
+                return {...p, comments: newComments};
+            }
+            return p;
+        })
+
+        setAllPosts(updatedPosts);
+    }
+
+    const handleDeletePost = (postId) => {
+        if (!currentUser) return;
+        const updatedPosts = allPosts.filter(p => p.id !== postId);
+        setAllPosts(updatedPosts);
+    }
+
     return (
         <div className="profile-page">
             <div className="profile-header">
@@ -117,16 +138,19 @@ function Profile() {
 
                 <div className="profile-info">
                     <h1>{user.name} {user.surname}</h1>
-                    <div className="stats-row" style={{ color: '#888', marginBottom: '15px' }}>
+                    <div className="stats-row" style={{color: '#888', marginBottom: '15px'}}>
                         <span><strong>{user.friends?.length || 0}</strong> Friends</span>
                         <span><strong>{user.followers?.length || 0}</strong> Followers</span>
                     </div>
 
                     {currentUser && isMe ? (
                         <div className="action-buttons">
-                            <button className="edit-profile-btn profile-btn" onClick={() => {setIsEditing(true)}}>Edit Profile</button>
+                            <button className="edit-profile-btn profile-btn" onClick={() => {
+                                setIsEditing(true)
+                            }}>Edit Profile
+                            </button>
                         </div>
-                    ) : ( currentUser &&
+                    ) : (currentUser &&
                         <div className="action-buttons">
 
                             <button
@@ -144,11 +168,16 @@ function Profile() {
                                 <button className="request-sent-btn profile-btn" disabled>Request Sent</button>
                             ) : hasReceivedRequest ? (
                                 <>
-                                    <button className="accept-btn profile-btn" onClick={() => acceptFriendRequest(user.id)}>Accept</button>
-                                    <button className="decline-btn profile-btn" onClick={() => declineFriendRequest(user.id)}>Decline</button>
+                                    <button className="accept-btn profile-btn"
+                                            onClick={() => acceptFriendRequest(user.id)}>Accept
+                                    </button>
+                                    <button className="decline-btn profile-btn"
+                                            onClick={() => declineFriendRequest(user.id)}>Decline
+                                    </button>
                                 </>
                             ) : (
-                                <button className="add-btn profile-btn" onClick={() => sendFriendRequest(user.id)}>Add Friend</button>
+                                <button className="add-btn profile-btn" onClick={() => sendFriendRequest(user.id)}>Add
+                                    Friend</button>
                             )}
                         </div>
                     )}
@@ -164,6 +193,8 @@ function Profile() {
                             author={user}
                             onToggleLike={handleToggleLike}
                             onAddComment={handleAddComment}
+                            onDeleteComment={handleDeleteComment}
+                            onDeletePost={handleDeletePost}
                         />
                     ))
                 ) : (
@@ -171,7 +202,7 @@ function Profile() {
                 )}
             </div>
             {isEditing && (
-                <EditProfile onClose={() => setIsEditing(false)} />
+                <EditProfile onClose={() => setIsEditing(false)}/>
             )}
         </div>
     );
