@@ -40,45 +40,48 @@ function PostCard({post, author, onToggleLike, onAddComment}) {
                 </div>
             </div>
             <div className="post-card-actions">
-                <div className={`like ${isLiked ? 'active' : ''}`} onClick={() => onToggleLike(post.id)}><FaHeart/>{likeCount}</div>
-                <div className="comment" onClick={() =>setIsComment(!isComment)}><FaRegComment/>{post.comments.length}</div>
+                <div className={`like ${isLiked ? 'active' : ''}`} onClick={() => onToggleLike(post.id)}>
+                    <FaHeart/>{likeCount}</div>
+                <div className="comment" onClick={() => setIsComment(!isComment)}><FaRegComment/>{post.comments.length}
+                </div>
                 <div className="share"><FaShare/></div>
             </div>
             {isComment && (
                 <>
-                <div className="post-comments">
-                    {post.comments.length > 0 ? (
-                        post.comments.map((comment, index) => {
-                            const user = allUsers.find(u => u.id === comment.author);
-                            const content = comment.description
+                    <div className="post-comments">
+                        {post.comments.length > 0 ? (
+                            post.comments.map((comment, index) => {
+                                const user = allUsers.find(u => u.id === comment.author);
+                                const content = comment.description
 
-                            if (!user) {
-                                return null
-                            }
+                                if (!user) {
+                                    return null
+                                }
 
-                            return (
-                                <div className="comment-item" key={index}>
-                                    <img src={user.avatar} className="avatar" alt="avatar"/>
-                                    <div className="author-name">{user.name} {user.surname}</div>
-                                    <div className="content">{content}</div>
-                                </div>
-                            )
-                        })
-                    ) : (
-                        <div className="no-comments">No comments</div>
-                    )}
-                </div>
-                <form onSubmit={(e) => {
-                    e.preventDefault();
-                    onAddComment(post.id, commentText);
-                    setCommentText("");
-                    }}>
-                    <div className="comment-form">
-                        <img src={currentUser.avatar} className="avatar" alt="avatar"/>
-                        <input type="text" placeholder="Start writing..." value={commentText} onChange={(e) => setCommentText(e.target.value)}/>
-                        <button type="submit">Post</button>
+                                return (
+                                    <div className="comment-item" key={index}>
+                                        <img src={user.avatar} className="avatar" alt="avatar"/>
+                                        <div className="author-name">{user.name} {user.surname}</div>
+                                        <div className="content">{content}</div>
+                                    </div>
+                                )
+                            })
+                        ) : (
+                            <div className="no-comments">No comments</div>
+                        )}
                     </div>
-                </form>
+                    <form onSubmit={(e) => {
+                        e.preventDefault();
+                        onAddComment(post.id, commentText);
+                        setCommentText("");
+                    }}>
+                        <div className="comment-form">
+                            <img src={currentUser.avatar} className="avatar" alt="avatar"/>
+                            <input type="text" placeholder="Start writing..." value={commentText}
+                                   onChange={(e) => setCommentText(e.target.value)}/>
+                            <button type="submit">Post</button>
+                        </div>
+                    </form>
                 </>
             )}
         </div>

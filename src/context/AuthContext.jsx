@@ -87,7 +87,7 @@ export const AuthProvider = ({children}) => {
                 } else {
                     newFollowing = [...user.following, targetUserId];
                 }
-                return { ...user, following: newFollowing };
+                return {...user, following: newFollowing};
             }
 
             if (user.id === targetUserId) {
@@ -103,7 +103,7 @@ export const AuthProvider = ({children}) => {
                         currentUser.id
                     );
                 }
-                return { ...user, followers: newFollowers };
+                return {...user, followers: newFollowers};
             }
 
             return user;
@@ -114,7 +114,7 @@ export const AuthProvider = ({children}) => {
         setCurrentUser(updatedCurrentUser);
     };
 
-    const sendNotification = (receiverId, content, type="info", referenceId=null) => {
+    const sendNotification = (receiverId, content, type = "info", referenceId = null) => {
         const senderId = currentUser ? currentUser.id : null;
         const notification = {
             "id": Date.now(),
@@ -220,10 +220,10 @@ export const AuthProvider = ({children}) => {
 
         const updatedUsers = allUsers.map(user => {
             if (user.id === currentUser.id) {
-                return { ...user, friends: user.friends.filter(id => id !== friendId) };
+                return {...user, friends: user.friends.filter(id => id !== friendId)};
             }
             if (user.id === friendId) {
-                return { ...user, friends: user.friends.filter(id => id !== currentUser.id) };
+                return {...user, friends: user.friends.filter(id => id !== currentUser.id)};
             }
             return user;
         });
@@ -236,7 +236,7 @@ export const AuthProvider = ({children}) => {
     const updateProfile = (userId, updatedData) => {
         const updatedUser = allUsers.map(user => {
             if (user.id === userId) {
-                return { ...user, ...updatedData}
+                return {...user, ...updatedData}
             }
             return user;
         })
@@ -244,7 +244,7 @@ export const AuthProvider = ({children}) => {
         updateUsers(updatedUser);
 
         if (currentUser && currentUser.id === userId) {
-            setCurrentUser(prev => ({ ...prev, ...updatedData }));
+            setCurrentUser(prev => ({...prev, ...updatedData}));
         }
     }
 

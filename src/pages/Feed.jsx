@@ -56,7 +56,7 @@ function Feed() {
                     }
                 }
 
-                return { ...post, likedBy: newLikedBy };
+                return {...post, likedBy: newLikedBy};
             }
             return post;
         });
