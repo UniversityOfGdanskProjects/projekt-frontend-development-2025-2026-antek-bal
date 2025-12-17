@@ -1,12 +1,15 @@
 import {Link, useNavigate} from "react-router-dom"
 import {useAuth} from "../context/AuthContext.jsx"
-import {FaBell, FaSearch} from "react-icons/fa";
-import "./Navbar.scss"
+import {FaBell, FaSearch, FaCommentDots} from "react-icons/fa";
+import {useChat} from "../context/ChatContext.jsx";
 import {useState} from "react";
+import "./Navbar.scss"
+
 
 function Navbar() {
     const navigate = useNavigate();
     const {allUsers, currentUser, logout, notifications, markAsRead} = useAuth();
+    const {messages, openChat} = useChat();
     const [showNotifications, setShowNotifications] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
 
@@ -54,6 +57,22 @@ function Navbar() {
         }
     }
 
+    const unreadMessagesCount = messages.filter(
+        msg => msg.receiverId === currentUser?.id && !msg.isRead
+    ).length;
+
+    const handleOpenUnreadChats = () => {
+        const unreadSenders = [
+            ...new Set(
+                messages
+                    .filter(msg => msg.receiverId === currentUser?.id && !msg.isRead)
+                    .map(msg => msg.senderId)
+            )
+        ];
+
+        unreadSenders.forEach(senderId => openChat(senderId));
+    };
+
     return (
         <nav className="navbar">
             <div className="nav-left">
@@ -96,6 +115,17 @@ function Navbar() {
             <ul className="nav-right">
                 {currentUser ? (
                         <>
+                            <li className="notification-container">
+                                <button
+                                    className="chat-btn"
+                                    onClick={handleOpenUnreadChats}
+                                >
+                                    <FaCommentDots />
+                                    {unreadMessagesCount > 0 && (
+                                        <span className="badge">{unreadMessagesCount}</span>
+                                    )}
+                                </button>
+                            </li>
                             <li className="notification-container">
                                 <button
                                     className="notification-btn"

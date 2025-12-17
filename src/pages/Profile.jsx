@@ -4,6 +4,7 @@ import PostCard from "../components/PostCard.jsx";
 import EditProfile from "../components/EditProfile.jsx";
 import {useAuth} from "../context/AuthContext";
 import {posts as initialPosts} from "../data/mockData.js";
+import {useChat} from "../context/ChatContext";
 import "./Profile.scss";
 
 function Profile() {
@@ -18,6 +19,7 @@ function Profile() {
         removeFriend,
         sendNotification
     } = useAuth();
+    const {openChat} = useChat();
 
     const [allPosts, setAllPosts] = useState(() => {
         const savedPosts = localStorage.getItem("feed-posts");
@@ -161,9 +163,14 @@ function Profile() {
                             </button>
 
                             {isFriend ? (
-                                <button className="remove-btn profile-btn" onClick={() => removeFriend(user.id)}>
-                                    Remove Friend
-                                </button>
+                                <>
+                                    <button className="remove-btn profile-btn" onClick={() => removeFriend(user.id)}>
+                                        Remove Friend
+                                    </button>
+                                    <button className="profile-btn chat-btn" onClick={() => openChat(user.id)}>
+                                        Message
+                                    </button>
+                                </>
                             ) : hasSentRequest ? (
                                 <button className="request-sent-btn profile-btn" disabled>Request Sent</button>
                             ) : hasReceivedRequest ? (
