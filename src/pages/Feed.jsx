@@ -116,6 +116,12 @@ function Feed() {
         updatePosts(updatedPosts);
     }
 
+    const handleDeletePost = (postId) => {
+        if (!currentUser) return;
+        const updatedPosts = allPosts.filter(p => p.id !== postId);
+        updatePosts(updatedPosts);
+    }
+
     return (
         <div className="feed-page">
             <h1>Wall</h1>
@@ -134,6 +140,7 @@ function Feed() {
                             onToggleLike={handleToggleLike}
                             onAddComment={handleAddComment}
                             onDeleteComment={handleDeleteComment}
+                            onDeletePost={handleDeletePost}
                         />
                     )
                 })}

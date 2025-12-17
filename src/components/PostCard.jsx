@@ -5,7 +5,7 @@ import {useAuth} from "../context/AuthContext.jsx";
 import "./PostCard.scss";
 
 
-function PostCard({post, author, onToggleLike, onAddComment, onDeleteComment}) {
+function PostCard({post, author, onToggleLike, onAddComment, onDeleteComment, onDeletePost}) {
     const {currentUser, allUsers} = useAuth();
 
     const isLiked = currentUser && (post.likedBy || []).includes(currentUser.id);
@@ -30,7 +30,7 @@ function PostCard({post, author, onToggleLike, onAddComment, onDeleteComment}) {
                 <div className="post-card-header-right">
                     <div className="visibility">{post.visibility}</div>
                     {post.author === currentUser.id && (
-                        <FaRegTrashAlt className="icon"/>
+                        <FaRegTrashAlt className="icon" onClick={() => onDeletePost(post.id)}/>
                     )}
                 </div>
             </div>
