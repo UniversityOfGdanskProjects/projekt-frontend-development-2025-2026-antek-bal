@@ -110,6 +110,21 @@ function Profile() {
         setAllPosts(updatedPosts);
     }
 
+    const handleDeleteComment = (postId, commentId) => {
+        if (!currentUser) return;
+
+        const updatedPosts = allPosts.map(p => {
+            if (p.id === postId) {
+                const newComments = p.comments.filter((_, i) => i!== commentId);
+
+                return {...p, comments: newComments};
+            }
+            return p;
+        })
+
+        setAllPosts(updatedPosts);
+    }
+
     return (
         <div className="profile-page">
             <div className="profile-header">
@@ -172,6 +187,7 @@ function Profile() {
                             author={user}
                             onToggleLike={handleToggleLike}
                             onAddComment={handleAddComment}
+                            onDeleteComment={handleDeleteComment}
                         />
                     ))
                 ) : (

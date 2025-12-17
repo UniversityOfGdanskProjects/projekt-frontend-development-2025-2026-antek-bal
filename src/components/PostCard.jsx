@@ -9,9 +9,9 @@ function PostCard({post, author, onToggleLike, onAddComment, onDeleteComment}) {
     const {currentUser, allUsers} = useAuth();
 
     const isLiked = currentUser && (post.likedBy || []).includes(currentUser.id);
-    const likeCount = (post.likedBy || []).length + (post.likes || 0)
+    const likeCount = (post.likedBy || []).length + (post.likes || 0);
 
-    const [isComment, setIsComment] = useState(false)
+    const [isComment, setIsComment] = useState(false);
     const [commentText, setCommentText] = useState("");
 
 
