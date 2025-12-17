@@ -1,11 +1,11 @@
 import {Link} from "react-router-dom";
 import {useState} from "react";
-import {FaHeart, FaRegComment, FaShare} from "react-icons/fa";
+import {FaHeart, FaRegComment, FaShare, FaRegTrashAlt} from "react-icons/fa";
 import {useAuth} from "../context/AuthContext.jsx";
 import "./PostCard.scss";
 
 
-function PostCard({post, author, onToggleLike, onAddComment}) {
+function PostCard({post, author, onToggleLike, onAddComment, onDeleteComment}) {
     const {currentUser, allUsers} = useAuth();
 
     const isLiked = currentUser && (post.likedBy || []).includes(currentUser.id);
@@ -29,6 +29,9 @@ function PostCard({post, author, onToggleLike, onAddComment}) {
                 </div>
                 <div className="post-card-header-right">
                     <div className="visibility">{post.visibility}</div>
+                    {post.author === currentUser.id && (
+                        <FaRegTrashAlt className="icon"/>
+                    )}
                 </div>
             </div>
             <div className="post-card-content">
@@ -62,7 +65,11 @@ function PostCard({post, author, onToggleLike, onAddComment}) {
                                     <div className="comment-item" key={index}>
                                         <Link to={`/profile/${user.id}`} className="link-avatar"><img src={user.avatar} className="avatar" alt="avatar"/></Link>
                                         <Link to={`/profile/${user.id}`} className="link-name"><div className="author-name">{user.name} {user.surname}</div></Link>
-                                        <div className="content">{content}</div>
+                                        {currentUser.id === user.id ? (
+                                            <div className="content"><span className="content-text">{content}</span><span className="content-icon"><FaRegTrashAlt onClick={() => onDeleteComment(post.id, index)}/></span></div>
+                                        ) : (
+                                            <div className="content"><span className="content-text">{content}</span></div>
+                                        )}
                                     </div>
                                 )
                             })
