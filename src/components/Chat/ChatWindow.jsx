@@ -6,7 +6,7 @@ import "./Chat.scss"
 
 function ChatWindow({partnerId}) {
     const {allUsers, currentUser} = useAuth();
-    const {messages, sendMessage, closeChat, minimizeChat } = useChat();
+    const {messages, sendMessage, closeChat, minimizeChat, markConversationAsRead } = useChat();
     const [text, setText] = useState("");
 
     const bodyRef = useRef(null);
@@ -23,6 +23,16 @@ function ChatWindow({partnerId}) {
             bodyRef.current.scrollTop = bodyRef.current.scrollHeight;
         }
     }, [chatMessages]);
+
+    useEffect(() => {
+        const hasUnread = chatMessages.some(
+            msg => !msg.isRead && msg.senderId === partnerId
+        );
+
+        if (hasUnread) {
+            markConversationAsRead(partnerId);
+        }
+    }, [chatMessages, partnerId, markConversationAsRead]);
 
     const handleSend = (e) => {
         e.preventDefault();
