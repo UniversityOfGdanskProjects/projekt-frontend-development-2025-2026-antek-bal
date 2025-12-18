@@ -62,7 +62,8 @@ export const AuthProvider = ({children}) => {
             "followers": [],
             "following": [],
             "friendRequests": [],
-            "role": null
+            "role": null,
+            "isBlocked": false,
         }
 
         updateUsers([...allUsers, newUser]);
@@ -249,6 +250,17 @@ export const AuthProvider = ({children}) => {
         }
     }
 
+    const toggleBlockUser = (userId) => {
+        const updatedUsers = allUsers.map(user => {
+            if (user.id === userId) {
+                return { ...user, isBlocked: !user.isBlocked };
+            }
+            return user;
+        });
+
+        updateUsers(updatedUsers);
+    };
+
     const value = {
         allUsers,
         currentUser,
@@ -263,7 +275,8 @@ export const AuthProvider = ({children}) => {
         acceptFriendRequest,
         declineFriendRequest,
         removeFriend,
-        updateProfile
+        updateProfile,
+        toggleBlockUser,
     }
 
     return (
