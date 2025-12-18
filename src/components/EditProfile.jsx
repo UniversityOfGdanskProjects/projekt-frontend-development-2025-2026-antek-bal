@@ -1,27 +1,23 @@
 import {useState} from "react"
 import {useNavigate} from "react-router-dom"
-
 import {useAuth} from "../context/AuthContext.jsx"
-
 import "./EditProfile.scss"
-
 
 function EditProfile({onClose}) {
     const {currentUser, updateProfile} = useAuth();
-    const [step, setStep] = useState(1);
     const navigate = useNavigate();
+
+    const [step, setStep] = useState(1);
     const [formData, setFormData] = useState({
-        "id": currentUser.id,
-        "username": currentUser.username,
-        "password": currentUser.password,
-        "name": currentUser.name,
-        "surname": currentUser.surname,
-        "avatar": currentUser.avatar,
+        ...currentUser,
+        password: ""
     })
     const [preview, setPreview] = useState(currentUser.avatar);
 
-    const nextStep = () => setStep(step + 1);
-    const prevStep = () => setStep(step - 1);
+    const handleChange = (e) => {
+        const {name, value} = e.target;
+        setFormData(prev => ({...prev, [name]: value}));
+    }
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
@@ -29,7 +25,7 @@ function EditProfile({onClose}) {
             const reader = new FileReader();
             reader.onloadend = () => {
                 setPreview(reader.result);
-                setFormData({...formData, avatar: reader.result});
+                setFormData(prev => ({...prev, avatar: reader.result}));
             };
             reader.readAsDataURL(file);
         }
@@ -38,43 +34,42 @@ function EditProfile({onClose}) {
     const handleSave = (e) => {
         e.preventDefault();
 
-        const data = {...formData};
-        if (!data.password) {
-            delete data.password;
+        const updates = {...formData};
+        if (!updates.password) {
+            delete updates.password;
         } else {
-            data.password = btoa(data.password);
+            updates.password = btoa(updates.password);
         }
 
-        updateProfile(currentUser.id, data);
+        updateProfile(currentUser.id, updates);
 
-        if (onClose) {
-            onClose()
-        }
+        if (onClose) onClose()
         navigate(`/profile/${currentUser.id}`);
     };
 
-    return (
-        <div className="edit-profile">
-            <div className="edit-container">
-
-                {step === 1 && (
+    const renderStepContent = () => {
+        switch (step) {
+            case 1:
+                return (
                     <div className="step-content">
                         <h1>Personal Info (Step 1/3)</h1>
                         <form>
                             <label>First Name</label>
                             <input
                                 type="text"
+                                name="name"
                                 placeholder="First name"
                                 value={formData.name}
-                                onChange={(e) => setFormData({...formData, name: e.target.value})}
+                                onChange={handleChange}
                             />
 
                             <label>Last Name</label>
                             <input
                                 type="text"
+                                name="surname"
                                 placeholder="Last name"
                                 value={formData.surname}
-                                onChange={(e) => setFormData({...formData, surname: e.target.value})}
+                                onChange={handleChange}
                             />
 
                             <label>Username</label>
@@ -86,9 +81,9 @@ function EditProfile({onClose}) {
                             />
                         </form>
                     </div>
-                )}
-
-                {step === 2 && (
+                )
+            case 2:
+                return (
                     <div className="step-content">
                         <h1>Profile Picture (Step 2/3)</h1>
                         <div className="avatar-preview">
@@ -100,33 +95,47 @@ function EditProfile({onClose}) {
                             onChange={handleImageChange}
                         />
                     </div>
-                )}
-
-                {step === 3 && (
+                )
+            case 3:
+                return (
                     <div className="step-content">
                         <h1>Security (Step 3/3)</h1>
                         <form>
                             <label>New Password</label>
                             <input
                                 type="password"
+                                name="password"
                                 placeholder="Leave empty to keep current password"
                                 value={formData.password}
-                                onChange={(e) => setFormData({...formData, password: e.target.value})}
+                                onChange={handleChange}
                             />
                         </form>
                     </div>
-                )}
+                )
+            default:
+                return null
+        }
+    }
 
+    return (
+        <div className="edit-profile">
+            <div className="edit-container">
+                {renderStepContent()}
                 <div className="form-actions">
                     {step > 1 && (
-                        <button type="button" onClick={prevStep}>Back</button>
+                        <button type="button" onClick={() => setStep(s => s - 1)}>
+                            Back
+                        </button>
                     )}
 
                     {step < 3 ? (
-                        <button type="button" onClick={nextStep}>Next</button>
+                        <button type="button" onClick={() => setStep(s => s + 1)}>
+                            Next
+                        </button>
                     ) : (
-                        <button type="button save-btn" onClick={handleSave}>Save
-                            Changes</button>
+                        <button type="button" className="save-btn" onClick={handleSave}>
+                            Save Changes
+                        </button>
                     )}
                 </div>
 
