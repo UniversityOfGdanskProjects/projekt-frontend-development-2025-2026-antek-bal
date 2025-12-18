@@ -47,39 +47,42 @@ export const PostProvider = ({ children }) => {
         }));
     };
 
-    const addComment = (postId, content, currentUser, sendNotification) => {
-        if (!currentUser) return;
-
-        setAllPosts(prev => prev.map(p => {
-            if (p.id === postId) {
-                const newComment = {
-                    "author": currentUser.id,
-                    "description": content,
-                    "date": new Date().toISOString()
-                };
-
-                if (p.author !== currentUser.id && sendNotification) {
-                    sendNotification(
-                        p.author,
-                        `${currentUser.name} commented on your post`,
-                        "comment",
-                        p.id
-                    );
-                }
-
-                return {...p, comments: [...(p.comments || []), newComment]};
+    const updatePostInState = (postId, updateCallback) => {
+        setAllPosts(prev => prev.map(post => {
+            if (post.id === postId) {
+                return updateCallback(post);
             }
-            return p;
+            return post;
         }));
     };
 
-    const deleteComment = (postId, commentIndex) => {
-        setAllPosts(prev => prev.map(p => {
-            if (p.id === postId) {
-                const newComments = p.comments.filter((_, i) => i !== commentIndex);
-                return {...p, comments: newComments};
+    const addComment = (postId, content, currentUser, sendNotification) => {
+        if (!currentUser) return;
+
+        updatePostInState(postId, (post) => {
+            const newComment = {
+                "author": currentUser.id,
+                "description": content,
+                "date": new Date().toISOString()
+            };
+
+            if (post.author !== currentUser.id && sendNotification) {
+                sendNotification(
+                    post.author,
+                    `${currentUser.name} commented on your post`,
+                    "comment",
+                    post.id
+                );
             }
-            return p;
+
+            return {...post, comments: [...(post.comments || []), newComment]};
+        });
+    };
+
+    const deleteComment = (postId, commentIndex) => {
+        updatePostInState(postId, (post) => ({
+            ...post,
+            comments: post.comments.filter((_, i) => i !== commentIndex)
         }));
     };
 
