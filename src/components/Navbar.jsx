@@ -1,75 +1,125 @@
-import {Link, useNavigate} from "react-router-dom"
-import {useAuth} from "../context/AuthContext.jsx"
-import {FaBell, FaSearch, FaCommentDots} from "react-icons/fa";
-import {useChat} from "../context/ChatContext.jsx";
-import {useState} from "react";
+import { useMemo, useState } from "react"
+import { Link, useNavigate } from "react-router-dom"
+import { FaBell, FaCommentDots, FaSearch } from "react-icons/fa"
+
+import { useAuth } from "../context/AuthContext.jsx"
+import { useChat } from "../context/ChatContext.jsx"
+import {formatDate} from "../utils/date.js";
+
 import "./Navbar.scss"
 
+const SearchResults = ({ results, onSelect }) => {
+    if (results.length === 0) return null
+
+    return (
+        <div className="search-results">
+            {results.map((user) => (
+                <Link
+                    to={`/profile/${user.id}`}
+                    key={user.id}
+                    className="search-item"
+                    onClick={onSelect}
+                >
+                    <img src={user.avatar} alt="avatar"/>
+                    <div className="user-info">
+                        <span className="name">{user.name} {user.surname}</span>
+                        <span className="username">@{user.username}</span>
+                    </div>
+                </Link>
+            ))}
+        </div>
+    )
+}
+
+const NotificationDropdown = ({notifications, onNotificationClick}) => {
+    if (notifications.length === 0) {
+        return (
+            <div className="notification-dropdown">
+                <div className="no-notifications">No notifications</div>
+            </div>
+        )
+    }
+
+    return (
+        <div className="notification-dropdown">
+            {notifications.map(n => (
+                <div
+                    key={n.id}
+                    className={`notification-item ${n.isRead ? 'read' : 'unread'}`}
+                    onClick={() => onNotificationClick(n)}
+                >
+                    <div className="notification-content">{n.content}</div>
+                    <div className="notification-date">{formatDate(n.date)}</div>
+                </div>
+            ))}
+        </div>
+    )
+}
+
+const highlightPost = (referenceId) => {
+    setTimeout(() => {
+        const element = document.getElementById(`post-${referenceId}`)
+        if (element) {
+            element.scrollIntoView({behavior: "smooth", block: "center"})
+            element.style.transition = "border 0.5s"
+            element.style.border = "2px solid #2196f3"
+            setTimeout(() => element.style.border = "none", 2000)
+        }
+    }, 800)
+}
 
 function Navbar() {
     const navigate = useNavigate();
     const {allUsers, currentUser, logout, notifications, markAsRead} = useAuth();
     const {messages, openChat} = useChat();
+
     const [showNotifications, setShowNotifications] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
 
-    const myNotifications = currentUser ? (notifications || []).filter(n => n.receiverId === currentUser.id) : [];
-    const unreadCount = myNotifications.filter(n => !n.isRead).length;
+    const myNotifications = useMemo(() => {
+        return currentUser ? (notifications || []).filter(n => n.receiverId === currentUser.id) : [];
+    }, [currentUser, notifications]);
 
-    const filteredUsers = searchQuery.length > 0
-        ? allUsers.filter(user => {
+    const unreadCount = useMemo(() =>
+        myNotifications.filter(n => !n.isRead).length,
+        [myNotifications]
+    )
+
+    const filteredUsers = useMemo(() => {
+        if (!searchQuery) return [];
+        const lowerQuery = searchQuery.toLowerCase();
+        return allUsers.filter(user => {
             const searchString = `${user.name} ${user.surname} ${user.username}`.toLowerCase();
+            return searchString.includes(lowerQuery)
+        });
+    }, [searchQuery, allUsers]);
 
-            return searchString.includes(searchQuery.toLowerCase())
-        })
-        : [];
+    const unreadMessagesCount = useMemo(() =>
+        messages.filter(msg => msg.receiverId === currentUser?.id && !msg.isRead).length,
+        [messages, currentUser]
+    )
 
-    const handleUserClick = () => {
-        setSearchQuery("");
-    }
-
-    const handleNotification = (notification) => {
+    const handleNotificationClick = (notification) => {
         markAsRead(notification.id);
         setShowNotifications(false);
 
-        let targetUserId;
-
-        if (notification.type === "post") {
-            targetUserId = notification.senderId;
-        } else if (notification.type === "follow" || notification.type === "friend") {
-            targetUserId = notification.senderId;
-        } else {
-            targetUserId = currentUser.id;
-        }
+        const targetUserId = ["post", "follow", "friend"].includes(notification.type)
+            ? notification.senderId
+            : currentUser.id;
 
         navigate(`/profile/${targetUserId}`)
 
         if (["post", "like", "comment"].includes(notification.type)) {
-            setTimeout(() => {
-                const element = document.getElementById(`post-${notification.referenceId}`);
-                if (element) {
-                    element.scrollIntoView({behavior: 'smooth', block: 'center'});
-                    element.style.transition = "border 0.5s";
-                    element.style.border = "2px solid #2196f3";
-                    setTimeout(() => element.style.border = "none", 2000);
-                }
-            }, 800)
+            highlightPost(notification.referenceId);
         }
     }
 
-    const unreadMessagesCount = messages.filter(
-        msg => msg.receiverId === currentUser?.id && !msg.isRead
-    ).length;
-
     const handleOpenUnreadChats = () => {
-        const unreadSenders = [
-            ...new Set(
+        const unreadSenders = new Set(
                 messages
                     .filter(msg => msg.receiverId === currentUser?.id && !msg.isRead)
                     .map(msg => msg.senderId)
-            )
-        ];
-
+        )
         unreadSenders.forEach(senderId => openChat(senderId));
     };
 
@@ -89,85 +139,50 @@ function Navbar() {
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
-
-                        {filteredUsers.length > 0 && (
-                            <div className="search-results">
-                                {filteredUsers.map((user) => (
-                                    <Link
-                                        to={`/profile/${user.id}`}
-                                        key={user.id}
-                                        className="search-item"
-                                        onClick={handleUserClick}
-                                    >
-                                        <img src={user.avatar} alt="avatar"/>
-                                        <div className="user-info">
-                                            <span className="name">{user.name} {user.surname}</span>
-                                            <span className="username">@{user.username}</span>
-                                        </div>
-                                    </Link>
-                                ))}
-                            </div>
-                        )}
+                        <SearchResults
+                            results={filteredUsers}
+                            onSelect={() => setSearchQuery("")}
+                        />
                     </div>
                 )}
             </div>
 
             <ul className="nav-right">
                 {currentUser ? (
-                        <>
-                            {currentUser.role === 'admin' && (
-                                <li>
-                                    <Link to="/admin">Admin Panel</Link>
-                                </li>
-                            )}
-                            <li className="notification-container">
-                                <button
-                                    className="chat-btn"
-                                    onClick={handleOpenUnreadChats}
-                                >
-                                    <FaCommentDots />
-                                    {unreadMessagesCount > 0 && (
-                                        <span className="badge">{unreadMessagesCount}</span>
-                                    )}
-                                </button>
-                            </li>
-                            <li className="notification-container">
-                                <button
-                                    className="notification-btn"
-                                    onClick={() => setShowNotifications(!showNotifications)}
-                                >
-                                    <FaBell/>
-                                    {unreadCount > 0 && <span className="badge">{unreadCount}</span>}
-                                </button>
+                    <>
+                        {currentUser.role === 'admin' && (
+                            <li><Link to="/admin">Admin Panel</Link></li>
+                        )}
 
-                                {showNotifications && (
-                                    <div className="notification-dropdown">
-                                        {myNotifications.length > 0 ? (
-                                            myNotifications.map(n => (
-                                                <div
-                                                    key={n.id}
-                                                    className={`notification-item ${n.isRead ? 'read' : 'unread'}`}
-                                                    onClick={() => handleNotification(n)}
-                                                >
-                                                    <div className="notification-content">{n.content}</div>
-                                                    <div
-                                                        className="notification-date">{new Date(n.date).toLocaleString()}</div>
-                                                </div>
-                                            ))
-                                        ) : (
-                                            <div className="no-notifications">No notifications</div>
-                                        )}
-                                    </div>
+                        <li className="notification-container">
+                            <button className="chat-btn" onClick={handleOpenUnreadChats}>
+                                <FaCommentDots />
+                                {unreadMessagesCount > 0 && (
+                                    <span className="badge">{unreadMessagesCount}</span>
                                 )}
-                            </li>
-                            <li><Link to={`/profile/${currentUser.id}`}>Profile</Link></li>
-                            <li>
-                                <button onClick={logout}>Logout</button>
-                            </li>
-                        </>
-                    ) :
+                            </button>
+                        </li>
+
+                        <li className="notification-container">
+                            <button className="notification-btn" onClick={() => setShowNotifications(!showNotifications)}>
+                                <FaBell/>
+                                {unreadCount > 0 && <span className="badge">{unreadCount}</span>}
+                            </button>
+
+                            {showNotifications && (
+                                <NotificationDropdown
+                                    notifications={myNotifications}
+                                    onNotificationClick={handleNotificationClick}
+                                />
+                            )}
+                        </li>
+
+                        <li><Link to={`/profile/${currentUser.id}`}>Profile</Link></li>
+                        <li><button onClick={logout}>Logout</button></li>
+                    </>
+                ) : (
                     <li><Link to="/login">Login</Link></li>
-                }
+                )}
             </ul>
         </nav>
     );

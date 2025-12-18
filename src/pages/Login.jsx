@@ -1,146 +1,173 @@
-import {useState} from "react";
-import {useNavigate} from "react-router-dom";
-import {useAuth} from "../context/AuthContext.jsx";
-import "./Login.scss";
+import { useState } from "react"
+import { useLocation, useNavigate } from "react-router-dom"
+import {FaImage} from "react-icons/fa"
 
+import { useAuth } from "../context/AuthContext.jsx"
+import "./Login.scss"
 
 function Login() {
     const navigate = useNavigate();
+    const location = useLocation();
     const {login, register} = useAuth();
 
-    const [loginUsername, setLoginUsername] = useState("");
-    const [loginPassword, setLoginPassword] = useState("");
+    const [isLoginView, setIsLoginView] = useState(true);
 
-    const [registerUsername, setRegisterUsername] = useState("");
-    const [registerPassword, setRegisterPassword] = useState("");
-    const [registerName, setRegisterName] = useState("");
-    const [registerSurname, setRegisterSurname] = useState("");
-    const [registerAvatar, setRegisterAvatar] = useState("");
+    const [loginData, setLoginData] = useState({
+        username: "",
+        password: "",
+    });
 
-    const handleLogin = (e) => {
-        e.preventDefault();
+    const [registerData, setRegisterData] = useState({
+        username: "",
+        password: "",
+        name: "",
+        surname: "",
+        avatar: ""
+    })
 
-        const success = login(loginUsername, loginPassword);
-        if (success) {
-            navigate('/');
-        } else {
-            alert("Invalid credentials!");
-        }
+    const [preview, setPreview] = useState(null)
+
+    const handleLoginChange = (e) => {
+        const {name, value} = e.target;
+        setLoginData(prev => ({ ...prev, [name]: value }));
     }
 
-    const handleRegister = (e) => {
-        e.preventDefault();
-        if (!registerUsername || !registerPassword || !registerName || !registerSurname) {
-            alert("Complete all required fields");
-            return;
-        }
-
-        const success = register(
-            registerUsername,
-            registerPassword,
-            registerName,
-            registerSurname,
-            registerAvatar
-        );
-
-        if (success) {
-            navigate('/');
-        } else {
-            alert("This username is already in use!");
-        }
-
+    const handleRegisterChange = (e) => {
+        const {name, value} = e.target;
+        setRegisterData(prev => ({ ...prev, [name]: value }));
     }
-    const [selectedImage, setSelectedImage] = useState(null);
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
             const reader = new FileReader();
-
             reader.onloadend = () => {
-                const base64 = reader.result;
-
-                setRegisterAvatar(String(base64));
-                setSelectedImage(base64);
+                setPreview(reader.result);
+                setRegisterData(prev => ({ ...prev, [name]: reader.result }));
             }
-
             reader.readAsDataURL(file);
+        }
+    };
+
+    const handleSuccess = () => {
+        const from = location.state?.from?.pathname || "/";
+        navigate(from, {replace: true});
+    }
+
+    const onLoginSubmit = (e) => {
+        e.preventDefault();
+        const success = login(loginData.username, loginData.password);
+        if (success) {
+            handleSuccess();
+        } else {
+            alert("Invalid credentials!");
+        }
+    };
+
+    const onRegisterSubmit = (e) => {
+        e.preventDefault();
+        const { username, password, name, surname, avatar } = registerData;
+
+        if (!username || !password || !name || !surname) {
+            alert("Complete all required fields");
+            return;
+        }
+
+        const success = register(username, password, name, surname, avatar);
+        if (success) {
+            handleSuccess();
+        } else {
+            alert("This username is already in use!");
         }
     };
 
     return (
         <div className="login-page">
-            <h1>Login</h1>
-            <div className="login-form">
-                <form onSubmit={handleLogin}>
-                    <div className="form-inputs">
+            <div className="card">
+                <div className="card-header">
+                    <h1>{isLoginView ? "Welcome Back" : "Create Account"}</h1>
+                    <p>
+                        {isLoginView
+                            ? "Enter your details to login"
+                            : "Fill in the form to get started"}
+                    </p>
+                </div>
+
+                {isLoginView ? (
+                    <form onSubmit={onLoginSubmit} className="auth-form">
                         <input
                             type="text"
-                            placeholder="username"
-                            value={loginUsername}
-                            onChange={(e) => setLoginUsername(e.target.value)}
+                            name="username"
+                            placeholder="Username"
+                            value={loginData.username}
+                            onChange={handleLoginChange}
                         />
                         <input
                             type="password"
-                            placeholder="password"
-                            value={loginPassword}
-                            onChange={(e) => setLoginPassword(e.target.value)}
+                            name="password"
+                            placeholder="Password"
+                            value={loginData.password}
+                            onChange={handleLoginChange}
                         />
-                    </div>
-                    <button type="submit">Login</button>
-                </form>
-            </div>
-            <hr/>
-            <div className="register">
-                <h2>Create Account</h2>
-                <form onSubmit={handleRegister}>
-                    <div className="form-inputs">
+                        <button type="submit">Login</button>
+                    </form>
+                ) : (
+                    <form onSubmit={onRegisterSubmit} className="auth-form">
+                        <div className="row">
+                            <input
+                                type="text"
+                                name="name"
+                                placeholder="First Name"
+                                value={registerData.name}
+                                onChange={handleRegisterChange}
+                            />
+                            <input
+                                type="text"
+                                name="surname"
+                                placeholder="Last Name"
+                                value={registerData.surname}
+                                onChange={handleRegisterChange}
+                            />
+                        </div>
                         <input
                             type="text"
-                            placeholder="username"
-                            value={registerUsername}
-                            onChange={(e) => setRegisterUsername(e.target.value)}
+                            name="username"
+                            placeholder="Username"
+                            value={registerData.username}
+                            onChange={handleRegisterChange}
                         />
                         <input
                             type="password"
-                            placeholder="password"
-                            value={registerPassword}
-                            onChange={(e) => setRegisterPassword(e.target.value)}
+                            name="password"
+                            placeholder="Password"
+                            value={registerData.password}
+                            onChange={handleRegisterChange}
                         />
-                        <input
-                            type="text"
-                            placeholder="name"
-                            value={registerName}
-                            onChange={(e) => setRegisterName(e.target.value)}
-                        />
-                        <input
-                            type="text"
-                            placeholder="surname"
-                            value={registerSurname}
-                            onChange={(e) => setRegisterSurname(e.target.value)}
-                        />
-                        {selectedImage && (
-                            <div className="image-preview">
-                                <img
-                                    src={selectedImage}
-                                    alt="Preview"
+
+                        <div className="file-input-container">
+                            {preview && <img src={preview} alt="Preview" className="avatar-preview" />}
+                            <label className="file-label">
+                                {preview ? "Change Avatar" : "Upload Avatar (Optional)"}
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleImageChange}
+                                    hidden
                                 />
-                                <button
-                                    type="button"
-                                    onClick={() => setSelectedImage(null)}
-                                >
-                                    x
-                                </button>
-                            </div>)}
-                        <label className="file-label">Avatar (optional):</label>
-                        <input
-                            type="file"
-                            accept="image/*"
-                            onChange={handleImageChange}
-                        />
-                    </div>
-                    <button type="submit">Register</button>
-                </form>
+                            </label>
+                        </div>
+
+                        <button type="submit">Register</button>
+                    </form>
+                )}
+
+                <div className="toggle-view">
+                    {isLoginView ? (
+                        <p>Don't have an account? <span onClick={() => setIsLoginView(false)}>Register</span></p>
+                    ) : (
+                        <p>Already have an account? <span onClick={() => setIsLoginView(true)}>Login</span></p>
+                    )}
+                </div>
             </div>
         </div>
     );
