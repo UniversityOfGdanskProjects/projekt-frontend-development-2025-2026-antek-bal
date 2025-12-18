@@ -2,23 +2,17 @@ import { createContext, useContext, useEffect, useState } from "react"
 
 import { useAuth } from "./AuthContext"
 
+import useLocalStorage from "../hooks/useLocalStorage.jsx"
 
 const ChatContext = createContext(null);
 
 export const ChatProvider = ({children}) => {
     const {currentUser} = useAuth();
 
-    const [messages, setMessages] = useState(() => {
-        const saved = localStorage.getItem("chat-messages");
-        return saved ? JSON.parse(saved) : [];
-    });
+    const [messages, setMessages] = useLocalStorage("chat-messages", []);
 
     const [activeChats, setActiveChats] = useState([]);
     const [minimizedChats, setMinimizedChats] = useState([]);
-
-    useEffect(() => {
-        localStorage.setItem("chat-messages", JSON.stringify(messages));
-    }, [messages]);
 
     useEffect(() => {
         if (!currentUser) return;

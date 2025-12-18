@@ -2,18 +2,13 @@ import { createContext, useContext, useEffect, useState } from "react"
 
 import { posts as initialPosts } from "../data/mockData.js"
 
+import useLocalStorage from "../hooks/useLocalStorage.jsx"
+
 
 const PostContext = createContext(null);
 
 export const PostProvider = ({ children }) => {
-    const [allPosts, setAllPosts] = useState(() => {
-        const savedPosts = localStorage.getItem("feed-posts");
-        return savedPosts ? JSON.parse(savedPosts) : initialPosts;
-    });
-
-    useEffect(() => {
-        localStorage.setItem('feed-posts', JSON.stringify(allPosts));
-    }, [allPosts]);
+    const [allPosts, setAllPosts] = useLocalStorage("feed-posts", initialPosts);
 
     const addPost = (newPost) => {
         setAllPosts(prev => [newPost, ...prev]);

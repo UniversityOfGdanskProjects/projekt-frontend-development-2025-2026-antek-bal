@@ -2,40 +2,15 @@ import { createContext, useContext, useEffect, useState } from "react"
 
 import { users } from "../data/mockData.js"
 
+import useLocalStorage from "../hooks/useLocalStorage.jsx";
+
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({children}) => {
-    const [allUsers, updateUsers] = useState(() => {
-        const savedUsers = localStorage.getItem("users");
-        return savedUsers ? JSON.parse(savedUsers) : users;
-    })
-
-    const [currentUser, setCurrentUser] = useState(() => {
-        const user = localStorage.getItem("current-user");
-        return user ? JSON.parse(user) : null;
-    });
-
-    const [notifications, setNotifications] = useState(() => {
-        const newNotifications = localStorage.getItem("notifications");
-        return newNotifications ? JSON.parse(newNotifications) : [];
-    });
-
-    useEffect(() => {
-        localStorage.setItem("users", JSON.stringify(allUsers));
-    }, [allUsers]);
-
-    useEffect(() => {
-        if (currentUser) {
-            localStorage.setItem("current-user", JSON.stringify(currentUser));
-        } else {
-            localStorage.removeItem("current-user");
-        }
-    }, [currentUser]);
-
-    useEffect(() => {
-        localStorage.setItem("notifications", JSON.stringify(notifications));
-    }, [notifications]);
+    const [allUsers, updateUsers] = useLocalStorage("users", users);
+    const [currentUser, setCurrentUser] = useLocalStorage("current-user", null);
+    const [notifications, setNotifications] = useLocalStorage("notifications", []);
 
     const login = (username, password) => {
         const passwordHash = btoa(password);
