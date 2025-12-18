@@ -6,8 +6,8 @@ import { useAuth } from "../context/AuthContext"
 const AdminRoute = ({children}) => {
     const {currentUser} = useAuth();
 
-    if (currentUser.role !== 'admin') {
-        return <Navigate to="/" replace/>;
+    if (!currentUser || currentUser.role !== "admin") {
+        return <Navigate to="/" replace></Navigate>
     }
 
     return children;
