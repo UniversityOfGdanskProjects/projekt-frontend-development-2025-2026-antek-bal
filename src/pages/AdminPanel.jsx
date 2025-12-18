@@ -1,6 +1,7 @@
 import {useState} from "react";
 import {useAuth} from "../context/AuthContext.jsx";
 import {usePosts} from "../context/PostContext.jsx"
+import "./AdminPanel.scss"
 
 const AdminPanel = () => {
     const {allUsers, toggleBlockUser} = useAuth()
