@@ -1,10 +1,10 @@
-import {useState, useEffect} from "react";
+import {useState} from "react";
 import {useParams} from "react-router-dom";
 import PostCard from "../components/PostCard.jsx";
 import EditProfile from "../components/EditProfile.jsx";
 import {useAuth} from "../context/AuthContext";
-import {posts as initialPosts} from "../data/mockData.js";
 import {useChat} from "../context/ChatContext";
+import {usePosts} from "../context/PostContext.jsx";
 import "./Profile.scss";
 
 function Profile() {
@@ -21,16 +21,9 @@ function Profile() {
     } = useAuth();
     const {openChat} = useChat();
 
-    const [allPosts, setAllPosts] = useState(() => {
-        const savedPosts = localStorage.getItem("feed-posts");
-        return savedPosts ? JSON.parse(savedPosts) : initialPosts;
-    });
+    const { allPosts, toggleLike, addComment, deleteComment, deletePost } = usePosts();
 
     const [isEditing, setIsEditing] = useState(false);
-
-    useEffect(() => {
-        localStorage.setItem("feed-posts", JSON.stringify(allPosts));
-    }, [allPosts]);
 
     const user = allUsers.find((user) => user.id === Number(userId));
 
@@ -39,35 +32,11 @@ function Profile() {
     }
 
     const handleToggleLike = (postId) => {
-        if (!currentUser) return;
+        toggleLike(postId, currentUser, sendNotification);
+    }
 
-        const updatedPosts = allPosts.map(post => {
-            if (post.id === postId) {
-                const currentLikes = post.likedBy || [];
-                const isLiked = currentLikes.includes(currentUser.id)
-
-                let newLikedBy;
-                if (isLiked) {
-                    newLikedBy = currentLikes.filter(id => id !== currentUser.id);
-                } else {
-                    newLikedBy = [...currentLikes, currentUser.id]
-
-                    if (post.author !== currentUser.id) {
-                        sendNotification(
-                            post.author,
-                            `${currentUser.name} liked your post!`,
-                            "like",
-                            post.id
-                        )
-                    }
-                }
-
-                return {...post, likedBy: newLikedBy};
-            }
-            return post;
-        })
-
-        setAllPosts(updatedPosts)
+    const handleAddComment = (postId, content) => {
+        addComment(postId, content, currentUser, sendNotification);
     }
 
     let filteredPosts;
@@ -83,55 +52,6 @@ function Profile() {
     const isFriend = currentUser?.friends?.includes(user.id);
     const hasSentRequest = user.friendRequests?.includes(currentUser?.id);
     const hasReceivedRequest = currentUser?.friendRequests?.includes(user.id);
-
-    const handleAddComment = (postId, content) => {
-        if (!currentUser) return;
-
-        const updatedPosts = allPosts.map(p => {
-            if (p.id === postId) {
-                const newComment = {
-                    "author": currentUser.id,
-                    "description": content,
-                    "date": new Date().toISOString()
-                };
-
-                if (p.author !== currentUser.id) {
-                    sendNotification(
-                        p.author,
-                        `${currentUser.name} commented on your post`,
-                        "comment",
-                        p.id
-                    );
-                }
-
-                return {...p, comments: [...(p.comments || []), newComment]};
-            }
-            return p;
-        });
-
-        setAllPosts(updatedPosts);
-    }
-
-    const handleDeleteComment = (postId, commentId) => {
-        if (!currentUser) return;
-
-        const updatedPosts = allPosts.map(p => {
-            if (p.id === postId) {
-                const newComments = p.comments.filter((_, i) => i!== commentId);
-
-                return {...p, comments: newComments};
-            }
-            return p;
-        })
-
-        setAllPosts(updatedPosts);
-    }
-
-    const handleDeletePost = (postId) => {
-        if (!currentUser) return;
-        const updatedPosts = allPosts.filter(p => p.id !== postId);
-        setAllPosts(updatedPosts);
-    }
 
     return (
         <div className="profile-page">
@@ -200,8 +120,8 @@ function Profile() {
                             author={user}
                             onToggleLike={handleToggleLike}
                             onAddComment={handleAddComment}
-                            onDeleteComment={handleDeleteComment}
-                            onDeletePost={handleDeletePost}
+                            onDeleteComment={deleteComment}
+                            onDeletePost={deletePost}
                         />
                     ))
                 ) : (
