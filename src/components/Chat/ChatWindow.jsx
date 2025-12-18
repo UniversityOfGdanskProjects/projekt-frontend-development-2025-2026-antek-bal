@@ -18,11 +18,11 @@ const ChatHeader = ({partner, onMinimize, onClose}) => (
     </div>
 )
 
-const MessageBubble = ({message, isMine}) => {
+const MessageBubble = ({message, isMine}) => (
     <div className={`message ${isMine ? "sent" : "received"}`}>
         {message.content}
     </div>
-}
+)
 
 const ChatInput = ({onSend}) => {
     const [text, setText] = useState("")
