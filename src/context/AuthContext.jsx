@@ -39,6 +39,10 @@ export const AuthProvider = ({children}) => {
         const passwordHash = btoa(password);
         const user = allUsers.find(u => u.username === username && u.password === passwordHash);
         if (user) {
+            if (user.isBlocked) {
+                alert("Your account has been suspended")
+                return false
+            }
             setCurrentUser(user);
             return true;
         }
@@ -61,7 +65,9 @@ export const AuthProvider = ({children}) => {
             "friends": [],
             "followers": [],
             "following": [],
-            "friendRequests": []
+            "friendRequests": [],
+            "role": null,
+            "isBlocked": false,
         }
 
         updateUsers([...allUsers, newUser]);
@@ -248,6 +254,17 @@ export const AuthProvider = ({children}) => {
         }
     }
 
+    const toggleBlockUser = (userId) => {
+        const updatedUsers = allUsers.map(user => {
+            if (user.id === userId) {
+                return { ...user, isBlocked: !user.isBlocked };
+            }
+            return user;
+        });
+
+        updateUsers(updatedUsers);
+    };
+
     const value = {
         allUsers,
         currentUser,
@@ -262,7 +279,8 @@ export const AuthProvider = ({children}) => {
         acceptFriendRequest,
         declineFriendRequest,
         removeFriend,
-        updateProfile
+        updateProfile,
+        toggleBlockUser,
     }
 
     return (

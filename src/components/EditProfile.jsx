@@ -89,8 +89,7 @@ function EditProfile({onClose}) {
                     <div className="step-content">
                         <h1>Profile Picture (Step 2/3)</h1>
                         <div className="avatar-preview">
-                            <img src={preview} alt="Avatar Preview"
-                                 style={{width: '100px', height: '100px', borderRadius: '50%'}}/>
+                            <img src={preview} alt="Avatar Preview"/>
                         </div>
                         <input
                             type="file"
@@ -115,7 +114,7 @@ function EditProfile({onClose}) {
                     </div>
                 )}
 
-                <div className="form-actions" style={{marginTop: '20px', display: 'flex', gap: '10px'}}>
+                <div className="form-actions">
                     {step > 1 && (
                         <button type="button" onClick={prevStep}>Back</button>
                     )}
@@ -123,7 +122,7 @@ function EditProfile({onClose}) {
                     {step < 3 ? (
                         <button type="button" onClick={nextStep}>Next</button>
                     ) : (
-                        <button type="button" onClick={handleSave} style={{backgroundColor: '#00e676'}}>Save
+                        <button type="button save-btn" onClick={handleSave}>Save
                             Changes</button>
                     )}
                 </div>

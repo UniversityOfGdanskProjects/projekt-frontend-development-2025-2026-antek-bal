@@ -9,7 +9,9 @@ const users = [
         "friends": [2, 3],
         "followers": [2, 3],
         "following": [2, 3],
-        "friendRequests": []
+        "friendRequests": [],
+        "role": "admin",
+        "isBlocked": false
     },
     {
         "id": 2,
@@ -21,7 +23,9 @@ const users = [
         "friends": [1, 3],
         "followers": [1, 3],
         "following": [1, 3],
-        "friendRequests": []
+        "friendRequests": [],
+        "role": null,
+        "isBlocked": false
     },
     {
         "id": 3,
@@ -33,7 +37,9 @@ const users = [
         "friends": [1, 2],
         "followers": [1, 2],
         "following": [1, 2],
-        "friendRequests": []
+        "friendRequests": [],
+        "role": null,
+        "isBlocked": false
     }
 ]
 

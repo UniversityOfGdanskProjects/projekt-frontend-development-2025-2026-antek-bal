@@ -1,0 +1,112 @@
+@import "../styles/variables";
+
+.admin-page {
+  padding: 40px 0;
+
+  h1 {
+    color: $primary-color;
+    margin-bottom: 30px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 10px;
+  }
+
+  .admin-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+
+    .tab-btn {
+      background: transparent;
+      border: 1px solid $text-secondary;
+      color: $text-secondary;
+      padding: 10px 20px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.2s;
+
+      &.active {
+        background-color: $primary-color;
+        color: black;
+        border-color: $primary-color;
+      }
+
+      &:hover:not(.active) {
+        border-color: $text-main;
+        color: $text-main;
+      }
+    }
+  }
+
+  .table-container {
+    background-color: $surface-color;
+    border-radius: $border-radius;
+    padding: 20px;
+    overflow-x: auto;
+    box-shadow: $shadow-sm;
+
+    .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      color: $text-main;
+
+      th {
+        text-align: left;
+        padding: 15px;
+        border-bottom: 2px solid rgba(255,255,255,0.1);
+        color: $text-secondary;
+      }
+
+      td {
+        padding: 15px;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        vertical-align: middle;
+      }
+
+      .user-cell, .author-cell {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+        .info { display: flex; flex-direction: column; }
+        .username { font-size: 0.8rem; color: $text-secondary; }
+      }
+
+      .role-badge, .status-badge {
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        font-weight: bold;
+        text-transform: uppercase;
+      }
+
+      .role-badge.admin { background-color: #ff9800; color: black; }
+      .role-badge.user { background-color: rgba(255,255,255,0.1); }
+
+      .status-badge.active { color: #00e676; background-color: rgba(0, 230, 118, 0.1); }
+      .status-badge.blocked { color: #ff5252; background-color: rgba(255, 82, 82, 0.1); }
+
+      .post-content-cell {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        .post-thumb { width: 50px; height: 50px; object-fit: cover; border-radius: 4px; }
+      }
+
+      .action-btn {
+        padding: 6px 12px;
+        border-radius: 4px;
+        border: none;
+        cursor: pointer;
+        font-weight: bold;
+        transition: opacity 0.2s;
+
+        &.block { background-color: #ff5252; color: white; }
+        &.unblock { background-color: #00e676; color: black; }
+        &.delete { background-color: #d32f2f; color: white; }
+
+        &:hover { opacity: 0.8; }
+      }
+    }
+  }
+}

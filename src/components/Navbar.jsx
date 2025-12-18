@@ -115,6 +115,11 @@ function Navbar() {
             <ul className="nav-right">
                 {currentUser ? (
                         <>
+                            {currentUser.role === 'admin' && (
+                                <li>
+                                    <Link to="/admin">Admin Panel</Link>
+                                </li>
+                            )}
                             <li className="notification-container">
                                 <button
                                     className="chat-btn"
