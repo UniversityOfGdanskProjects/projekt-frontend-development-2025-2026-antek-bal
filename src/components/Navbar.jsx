@@ -5,6 +5,8 @@ import { FaBell, FaCommentDots, FaSearch } from "react-icons/fa"
 import { useAuth } from "../context/AuthContext.jsx"
 import { useChat } from "../context/ChatContext.jsx"
 
+import {formatDate} from "../utils/date.js";
+
 import "./Navbar.scss"
 
 
@@ -154,7 +156,7 @@ function Navbar() {
                                                 >
                                                     <div className="notification-content">{n.content}</div>
                                                     <div
-                                                        className="notification-date">{new Date(n.date).toLocaleString()}</div>
+                                                        className="notification-date">{formatDate(n.date)}</div>
                                                 </div>
                                             ))
                                         ) : (

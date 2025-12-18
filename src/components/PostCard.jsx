@@ -4,6 +4,8 @@ import { FaHeart, FaRegComment, FaRegTrashAlt, FaShare } from "react-icons/fa"
 
 import { useAuth } from "../context/AuthContext.jsx"
 
+import {formatDate} from "../utils/date.js";
+
 import "./PostCard.scss"
 
 
@@ -27,7 +29,7 @@ function PostCard({post, author, onToggleLike, onAddComment, onDeleteComment, on
                     <div className="post-card-header-left-info">
                         <div className="author-name"><Link
                             to={`/profile/${post.author}`}>{author.name} {author.surname}</Link></div>
-                        <div className="date">{new Date(post.date).toLocaleString()}</div>
+                        <div className="date">{formatDate(post.date)}</div>
                     </div>
                 </div>
                 <div className="post-card-header-right">
