@@ -1,11 +1,15 @@
-import {useState} from "react";
-import {useParams} from "react-router-dom";
-import PostCard from "../components/PostCard.jsx";
-import EditProfile from "../components/EditProfile.jsx";
-import {useAuth} from "../context/AuthContext";
-import {useChat} from "../context/ChatContext";
-import {usePosts} from "../context/PostContext.jsx";
-import "./Profile.scss";
+import { useState } from "react"
+import { useParams } from "react-router-dom"
+
+import PostCard from "../components/PostCard.jsx"
+import EditProfile from "../components/EditProfile.jsx"
+
+import { useAuth } from "../context/AuthContext"
+import { useChat } from "../context/ChatContext"
+import { usePosts } from "../context/PostContext.jsx"
+
+import "./Profile.scss"
+
 
 function Profile() {
     const {userId} = useParams();

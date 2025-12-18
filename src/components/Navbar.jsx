@@ -1,9 +1,12 @@
-import {Link, useNavigate} from "react-router-dom"
-import {useAuth} from "../context/AuthContext.jsx"
-import {FaBell, FaSearch, FaCommentDots} from "react-icons/fa";
-import {useChat} from "../context/ChatContext.jsx";
-import {useState} from "react";
+import { useState } from "react"
+import { Link, useNavigate } from "react-router-dom"
+import { FaBell, FaCommentDots, FaSearch } from "react-icons/fa"
+
+import { useAuth } from "../context/AuthContext.jsx"
+import { useChat } from "../context/ChatContext.jsx"
+
 import "./Navbar.scss"
+
 
 
 function Navbar() {

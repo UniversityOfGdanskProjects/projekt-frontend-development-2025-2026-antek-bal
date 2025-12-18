@@ -1,7 +1,10 @@
-import {useState} from "react";
-import {useNavigate} from "react-router-dom";
-import {useAuth} from "../context/AuthContext.jsx";
-import "./Login.scss";
+import { useState } from "react"
+import { useNavigate } from "react-router-dom"
+
+import { useAuth } from "../context/AuthContext.jsx"
+
+import "./Login.scss"
+
 
 
 function Login() {

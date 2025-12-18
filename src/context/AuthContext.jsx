@@ -1,5 +1,7 @@
-import {useState, createContext, useContext, useEffect} from "react";
-import {users} from "../data/mockData.js";
+import { createContext, useContext, useEffect, useState } from "react"
+
+import { users } from "../data/mockData.js"
+
 
 const AuthContext = createContext(null);
 

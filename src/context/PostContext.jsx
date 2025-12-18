@@ -1,5 +1,7 @@
-import {createContext, useContext, useEffect, useState} from "react";
-import {posts as initialPosts} from "../data/mockData.js";
+import { createContext, useContext, useEffect, useState } from "react"
+
+import { posts as initialPosts } from "../data/mockData.js"
+
 
 const PostContext = createContext(null);
 

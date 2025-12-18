@@ -1,8 +1,11 @@
-import {Link} from "react-router-dom";
-import {useState} from "react";
-import {FaHeart, FaRegComment, FaShare, FaRegTrashAlt} from "react-icons/fa";
-import {useAuth} from "../context/AuthContext.jsx";
-import "./PostCard.scss";
+import { useState } from "react"
+import { Link } from "react-router-dom"
+import { FaHeart, FaRegComment, FaRegTrashAlt, FaShare } from "react-icons/fa"
+
+import { useAuth } from "../context/AuthContext.jsx"
+
+import "./PostCard.scss"
+
 
 
 function PostCard({post, author, onToggleLike, onAddComment, onDeleteComment, onDeletePost}) {

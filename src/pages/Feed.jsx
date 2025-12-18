@@ -1,8 +1,11 @@
-import PostCard from "../components/PostCard";
-import PostForm from "../components/PostForm";
-import {useAuth} from "../context/AuthContext.jsx";
-import {usePosts} from "../context/PostContext.jsx";
-import "./Feed.scss";
+import PostCard from "../components/PostCard"
+import PostForm from "../components/PostForm"
+
+import { useAuth } from "../context/AuthContext.jsx"
+import { usePosts } from "../context/PostContext.jsx"
+
+import "./Feed.scss"
+
 
 function Feed() {
     const {currentUser, allUsers, sendNotification} = useAuth();

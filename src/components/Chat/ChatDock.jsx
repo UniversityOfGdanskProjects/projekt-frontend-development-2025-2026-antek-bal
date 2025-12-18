@@ -1,6 +1,8 @@
-import {useChat} from "../../context/ChatContext.jsx"
-import ChatWindow from "./ChatWindow.jsx"
 import {useAuth} from "../../context/AuthContext.jsx";
+import {useChat} from "../../context/ChatContext.jsx"
+
+import ChatWindow from "./ChatWindow.jsx"
+
 import "./Chat.scss"
 
 const ChatDock = () => {

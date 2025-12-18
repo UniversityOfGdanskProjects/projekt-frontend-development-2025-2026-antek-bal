@@ -1,7 +1,10 @@
-import {useState} from "react";
-import {Link} from "react-router-dom";
-import {useAuth} from "../context/AuthContext";
-import "./PostForm.scss";
+import { useState } from "react"
+import { Link } from "react-router-dom"
+
+import { useAuth } from "../context/AuthContext"
+
+import "./PostForm.scss"
+
 
 function CreatePostForm({onAddPost}) {
     const [content, setContent] = useState('');
