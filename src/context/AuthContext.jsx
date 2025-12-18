@@ -61,7 +61,8 @@ export const AuthProvider = ({children}) => {
             "friends": [],
             "followers": [],
             "following": [],
-            "friendRequests": []
+            "friendRequests": [],
+            "role": null
         }
 
         updateUsers([...allUsers, newUser]);
