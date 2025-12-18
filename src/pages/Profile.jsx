@@ -16,9 +16,11 @@ const ProfileActions = ({
 }) => {
     if (isMe) {
         return (
-            <button className="edit-profile-btn profile-btn" onClick={onEdit}>
-                Edit Profile
-            </button>
+            <div className="action-buttons">
+                <button className="edit-btn profile-btn" onClick={onEdit}>
+                    Edit Profile
+                </button>
+            </div>
         );
     }
 

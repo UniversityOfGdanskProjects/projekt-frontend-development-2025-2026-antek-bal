@@ -45,7 +45,6 @@ function App() {
                 </ChatProvider>
             </PostProvider>
         </AuthProvider>
-
     );
 }
 
