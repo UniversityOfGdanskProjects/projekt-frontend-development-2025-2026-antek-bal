@@ -39,6 +39,10 @@ export const AuthProvider = ({children}) => {
         const passwordHash = btoa(password);
         const user = allUsers.find(u => u.username === username && u.password === passwordHash);
         if (user) {
+            if (user.isBlocked) {
+                alert("Your account has been suspended")
+                return false
+            }
             setCurrentUser(user);
             return true;
         }
