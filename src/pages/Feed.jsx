@@ -33,15 +33,19 @@ function Feed() {
         addComment(postId, content, currentUser, sendNotification);
     };
 
-    let filteredPosts;
+    let filteredPosts = allPosts;
+    filteredPosts = filteredPosts.filter(post => {
+        const author = allUsers.find(u => u.id === post.author);
+        return author && !author.isBlocked;
+    });
     if (currentUser) {
-        filteredPosts = allPosts.filter(p =>
+        filteredPosts = filteredPosts.filter(p =>
             p.visibility === "public" ||
             (p.visibility === "friends" && currentUser.friends?.includes(p.author)) ||
             p.author === currentUser.id
         );
     } else {
-        filteredPosts = allPosts.filter(p => p.visibility === "public");
+        filteredPosts = filteredPosts.filter(p => p.visibility === "public");
     }
 
     const sortedPosts = [...filteredPosts].sort((a, b) => new Date(b.date) - new Date(a.date));
