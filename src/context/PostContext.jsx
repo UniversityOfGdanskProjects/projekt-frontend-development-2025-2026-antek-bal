@@ -1,14 +1,20 @@
-import { createContext, useContext, useEffect, useState } from "react"
-
+import { createContext, useContext } from "react"
 import { posts as initialPosts } from "../data/mockData.js"
-
 import useLocalStorage from "../hooks/useLocalStorage.jsx"
-
 
 const PostContext = createContext(null);
 
 export const PostProvider = ({ children }) => {
     const [allPosts, setAllPosts] = useLocalStorage("feed-posts", initialPosts);
+
+    const updatePost = (postId, updateCb) => {
+        setAllPosts(prev => prev.map(post => {
+            if (post.id === postId) {
+                return updateCb(post)
+            }
+            return post
+        }))
+    }
 
     const addPost = (newPost) => {
         setAllPosts(prev => [newPost, ...prev]);
@@ -21,45 +27,36 @@ export const PostProvider = ({ children }) => {
     const toggleLike = (postId, currentUser, sendNotification) => {
         if (!currentUser) return;
 
-        setAllPosts(prev => prev.map(post => {
-            if (post.id === postId) {
-                const currentLikes = post.likedBy || [];
-                const isLiked = currentLikes.includes(currentUser.id);
+        updatePost(postId, (post) => {
+            const currentLikes = post.likedBy || [];
+            const isLiked = currentLikes.includes(currentUser.id);
 
-                let newLikedBy;
-                if (isLiked) {
-                    newLikedBy = currentLikes.filter(id => id !== currentUser.id);
-                } else {
-                    newLikedBy = [...currentLikes, currentUser.id];
-
-                    if (post.author !== currentUser.id && sendNotification) {
-                        sendNotification(
-                            post.author,
-                            `${currentUser.name} liked your post!`,
-                            "like",
-                            post.id
-                        );
-                    }
+            if (isLiked) {
+                return {
+                    ...post,
+                    likedBy: currentLikes.filter(id => id !== currentUser.id)
                 }
-                return {...post, likedBy: newLikedBy};
+            } else {
+                if (post.author !== currentUser.id && sendNotification) {
+                    sendNotification(
+                        post.author,
+                        `${currentUser.name} liked your post!`,
+                        "like",
+                        post.id
+                    );
+                }
+                return {
+                    ...post,
+                    likedBy: [...currentLikes, currentUser.id]
+                }
             }
-            return post;
-        }));
-    };
-
-    const updatePostInState = (postId, updateCallback) => {
-        setAllPosts(prev => prev.map(post => {
-            if (post.id === postId) {
-                return updateCallback(post);
-            }
-            return post;
-        }));
+        });
     };
 
     const addComment = (postId, content, currentUser, sendNotification) => {
         if (!currentUser) return;
 
-        updatePostInState(postId, (post) => {
+        updatePost(postId, (post) => {
             const newComment = {
                 "author": currentUser.id,
                 "description": content,
@@ -80,7 +77,7 @@ export const PostProvider = ({ children }) => {
     };
 
     const deleteComment = (postId, commentIndex) => {
-        updatePostInState(postId, (post) => ({
+        updatePost(postId, (post) => ({
             ...post,
             comments: post.comments.filter((_, i) => i !== commentIndex)
         }));
