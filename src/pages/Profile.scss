@@ -29,6 +29,11 @@
       flex-direction: column;
       flex: 1;
 
+      .stats-row {
+        color: #888;
+        margin-bottom: 15px;
+      }
+
       h1 {
         margin: 0;
         font-size: 2rem;

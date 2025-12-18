@@ -60,7 +60,7 @@ function Profile() {
 
                 <div className="profile-info">
                     <h1>{user.name} {user.surname}</h1>
-                    <div className="stats-row" style={{color: '#888', marginBottom: '15px'}}>
+                    <div className="stats-row">
                         <span><strong>{user.friends?.length || 0}</strong> Friends</span>
                         <span><strong>{user.followers?.length || 0}</strong> Followers</span>
                     </div>
