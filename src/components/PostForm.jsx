@@ -1,28 +1,39 @@
-import { useState } from "react"
+import {useRef, useState} from "react"
 import { Link } from "react-router-dom"
+import { FaImage } from "react-icons/fa"
 
 import { useAuth } from "../context/AuthContext"
-
 import "./PostForm.scss"
 
+const ImagePreview = ({ image, onRemove}) => {
+    if (!image) return null;
 
-function CreatePostForm({onAddPost}) {
-    const [content, setContent] = useState('');
+    return (
+        <div className="image-preview">
+            <img src={image} alt="Preview"/>
+            <button type="button" onClick={onRemove}>x</button>
+        </div>
+    )
+}
+
+const usePostForm = (onAddPost, currentUser) => {
+    const [content, setContent] = useState("");
     const [visibility, setVisibility] = useState('public');
     const [selectedImage, setSelectedImage] = useState(null);
-    const {currentUser} = useAuth();
+    const fileInputRef = useRef(null);
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
             const reader = new FileReader();
-
-            reader.onloadend = () => {
-                setSelectedImage(reader.result);
-            };
-
+            reader.onloadend = () => setSelectedImage(reader.result);
             reader.readAsDataURL(file);
         }
+    }
+
+    const removeImage = () => {
+        setSelectedImage(null);
+        if (fileInputRef.current) fileInputRef.current.value = "";
     }
 
     const handleSubmit = (e) => {
@@ -45,14 +56,41 @@ function CreatePostForm({onAddPost}) {
         onAddPost(newPost);
 
         setContent('');
-        setSelectedImage(null);
+        removeImage();
+        setVisibility('public');
     };
+
+    return {
+        content, setContent,
+        visibility, setVisibility,
+        selectedImage,
+        handleImageChange,
+        removeImage,
+        handleSubmit,
+        fileInputRef
+    }
+}
+
+function CreatePostForm({onAddPost}) {
+    const {currentUser} = useAuth();
+
+    const {
+        content, setContent,
+        visibility, setVisibility,
+        selectedImage,
+        handleImageChange,
+        removeImage,
+        handleSubmit,
+        fileInputRef
+    } = usePostForm(onAddPost, currentUser);
 
     return (
         <div className="create-post-card">
             <div className="form-header">
-                <Link to={`/profile/${currentUser.id}`}><img src={currentUser.avatar} alt="me"
-                                                             className="avatar"/></Link>
+                <Link to={`/profile/${currentUser.id}`}>
+                    <img src={currentUser.avatar} alt="me" className="avatar"/>
+                </Link>
+
                 <div className="inputs">
                     <textarea
                         placeholder={`What's on your mind, ${currentUser.name}?`}
@@ -60,19 +98,7 @@ function CreatePostForm({onAddPost}) {
                         onChange={(e) => setContent(e.target.value)}
                     />
 
-                    {selectedImage && (
-                        <div className="image-preview">
-                            <img
-                                src={selectedImage}
-                                alt="Preview"
-                            />
-                            <button
-                                onClick={() => setSelectedImage(null)}
-                            >
-                                x
-                            </button>
-                        </div>
-                    )}
+                    <ImagePreview image={selectedImage} onRemove={removeImage} />
 
                     <div className="form-actions">
                         <select
@@ -84,13 +110,20 @@ function CreatePostForm({onAddPost}) {
                             <option value="private">Private</option>
                         </select>
 
-                        <input
-                            type="file"
-                            accept="image/*"
-                            onChange={handleImageChange}
-                        />
-
-                        <button onClick={handleSubmit} disabled={!content.trim() && !selectedImage}>
+                        <label className="file-label" title="Add Image">
+                            <FaImage />
+                            <input
+                                ref={fileInputRef}
+                                type="file"
+                                accept="image/*"
+                                onChange={handleImageChange}
+                                hidden
+                            />
+                        </label>
+                        <button
+                            onClick={handleSubmit}
+                            disabled={!content.trim() && !selectedImage}
+                        >
                             Post
                         </button>
                     </div>
