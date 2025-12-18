@@ -1,14 +1,15 @@
 import Navbar from "./Navbar.jsx";
-
 import "./Layout.scss";
 
-function Layout({children}) {
+const Layout = ({ children }) => {
     return (
-        <main className="layout">
-            <Navbar/>
-            {children}
-        </main>
-    );
+        <div className="layout">
+            <Navbar />
+            <main className="main-content">
+                {children}
+            </main>
+        </div>
+    )
 }
 
 export default Layout;
