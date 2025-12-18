@@ -2,15 +2,13 @@ import {useState, useEffect} from "react";
 import PostCard from "../components/PostCard";
 import PostForm from "../components/PostForm";
 import {useAuth} from "../context/AuthContext.jsx";
+import {usePosts} from "../context/PostContext.jsx";
 import {posts} from "../data/mockData";
 import "./Feed.scss";
 
 function Feed() {
     const {currentUser, allUsers, sendNotification} = useAuth();
-    const [allPosts, updatePosts] = useState(() => {
-        const savedPosts = localStorage.getItem("feed-posts");
-        return savedPosts ? JSON.parse(savedPosts) : posts;
-    });
+    const {allPosts} = usePosts();
 
     useEffect(() => {
         localStorage.setItem('feed-posts', JSON.stringify(allPosts));
