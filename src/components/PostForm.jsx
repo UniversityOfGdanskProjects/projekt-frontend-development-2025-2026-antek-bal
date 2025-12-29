@@ -44,7 +44,7 @@ const usePostForm = (onAddPost, currentUser) => {
         const newPost = {
             id: Date.now(),
             author: currentUser.id,
-            description: content,
+            description: content.trim(),
             media: selectedImage,
             date: new Date().toISOString(),
             likes: 0,
