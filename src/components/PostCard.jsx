@@ -55,7 +55,7 @@ const CommentForm = ({ postId, onAdd, currentUser}) => {
                     value={text}
                     onChange={(e) => setText(e.target.value)}
                 />
-                <button type="submit">Post</button>
+                <button type="submit" disabled={!text.trim()}>Post</button>
             </div>
         </form>
     )
