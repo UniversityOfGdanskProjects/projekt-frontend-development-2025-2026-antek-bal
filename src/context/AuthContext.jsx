@@ -23,15 +23,14 @@ export const AuthProvider = ({children}) => {
         const passwordHash = btoa(password);
         const user = allUsers.find(u => u.username === username && u.password === passwordHash);
 
-        if (!user) return false;
+        if (!user) return {success: false, error: "Invalid credentials" };
 
         if (user.isBlocked) {
-            alert("Your account has been suspended")
-            return false
+            return {success: false, error: "Your account has been suspended"}
         }
 
         setCurrentUser(user);
-        return true;
+        return {success: true};
     }
 
     const register = (username, password, name, surname, avatar) => {

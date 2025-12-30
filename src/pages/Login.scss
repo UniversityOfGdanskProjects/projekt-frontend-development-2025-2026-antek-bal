@@ -38,29 +38,56 @@
         gap: 5px;
         text-align: left;
         width: 100%;
-      }
 
-      input {
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        padding: 12px 15px;
-        border-radius: 8px;
-        color: white;
-        font-size: 1rem;
-        transition: border-color 0.2s, box-shadow 0.2s;
-
-        &:focus {
-          outline: none;
-          border-color: $primary-color;
-        }
-
-        &.input-error {
-          border-color: $error-color;
-          background-color: rgba($error-color, 0.05);
+        input {
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          padding: 12px 15px;
+          border-radius: 8px;
+          color: white;
+          font-size: 1rem;
+          transition: border-color 0.2s, box-shadow 0.2s;
 
           &:focus {
+            outline: none;
+            border-color: $primary-color;
+          }
+
+          &.input-error {
             border-color: $error-color;
-            box-shadow: 0 0 0 2px rgba($error-color, 0.2);
+            background-color: rgba($error-color, 0.05);
+
+            &:focus {
+              border-color: $error-color;
+              box-shadow: 0 0 0 2px rgba($error-color, 0.2);
+            }
+          }
+        }
+
+        .password-group {
+          position: relative;
+          width: 100%;
+
+          input {
+            width: 100%;
+            padding-right: 40px;
+          }
+
+          .password-toggle-icon {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: $text-secondary;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            font-size: 1.1rem;
+            transition: color 0.2s;
+
+            &:hover {
+              color: $primary-color;
+            }
           }
         }
       }

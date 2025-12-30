@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
-import {FaImage} from "react-icons/fa"
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 import { useAuth } from "../context/AuthContext.jsx"
 import "./Login.scss"
@@ -11,14 +11,12 @@ function Login() {
     const {login, register} = useAuth();
 
     const [isLoginView, setIsLoginView] = useState(true);
-
+    const [showPassword, setShowPassword] = useState(false);
     const [errors, setErrors] = useState({});
-
     const [loginData, setLoginData] = useState({
         username: "",
         password: "",
     });
-
     const [registerData, setRegisterData] = useState({
         username: "",
         password: "",
@@ -26,7 +24,6 @@ function Login() {
         surname: "",
         avatar: ""
     })
-
     const [preview, setPreview] = useState(null)
 
     const clearError = (fieldName) => {
@@ -81,11 +78,11 @@ function Login() {
             return;
         }
 
-        const success = login(loginData.username, loginData.password);
-        if (success) {
+        const result = login(loginData.username, loginData.password);
+        if (result.success) {
             handleSuccess();
         } else {
-            setErrors({ general: "Invalid credentials" });
+            setErrors({ general: result.error });
         }
     };
 
@@ -97,6 +94,7 @@ function Login() {
         if (!name.trim()) newErrors.name = "First name required";
         if (!surname.trim()) newErrors.surname = "Last name required";
         if (!username.trim()) newErrors.username = "Username required";
+
         if (!password) newErrors.password = "Password required";
         else if (password.length < 12) newErrors.password = "Password must be at least 12 characters long";
         else if (password.toLowerCase() === password) newErrors.password = "Password must contain uppercase characters"
@@ -121,6 +119,7 @@ function Login() {
     const toggleView = (view) => {
         setIsLoginView(view);
         setErrors({});
+        setShowPassword(false);
         setLoginData({ username: "", password: "" });
         setRegisterData({ username: "", password: "", name: "", surname: "", avatar: "" });
         setPreview(null);
@@ -159,14 +158,20 @@ function Login() {
                             {errors.username && <span className="error-text">{errors.username}</span>}
                         </div>
                         <div className="form-group">
-                            <input
-                                type="password"
-                                name="password"
-                                placeholder="Password"
-                                value={loginData.password}
-                                onChange={handleLoginChange}
-                                className={errors.password ? "input-error" : ""}
-                            />
+                            <div className="password-group">
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    name="password"
+                                    placeholder="Password"
+                                    value={loginData.password}
+                                    onChange={handleLoginChange}
+                                    className={errors.password ? "input-error" : ""}
+                                />
+                                <span className="password-toggle-icon" onClick={() => setShowPassword(!showPassword)}>
+                                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                                </span>
+                            </div>
+
                             {errors.password && <span className="error-text">{errors.password}</span>}
                         </div>
 
@@ -210,14 +215,19 @@ function Login() {
                             {errors.username && <span className="error-text">{errors.username}</span>}
                         </div>
                         <div className="form-group">
-                            <input
-                                type="password"
-                                name="password"
-                                placeholder="Password"
-                                value={registerData.password}
-                                onChange={handleRegisterChange}
-                                className={errors.password ? "input-error" : ""}
-                            />
+                            <div className="password-group">
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    name="password"
+                                    placeholder="Password"
+                                    value={registerData.password}
+                                    onChange={handleRegisterChange}
+                                    className={errors.password ? "input-error" : ""}
+                                />
+                                <span className="password-toggle-icon" onClick={() => setShowPassword(!showPassword)}>
+                                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                                </span>
+                            </div>
                             {errors.password && <span className="error-text">{errors.password}</span>}
                         </div>
 
