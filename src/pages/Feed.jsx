@@ -50,6 +50,18 @@ function Feed() {
     const handleToggleLike = (postId) => toggleLike(postId, currentUser, sendNotification);
     const handleAddComment = (postId, content) => addComment(postId, content, currentUser, sendNotification);
 
+    const suggestedFriends = allUsers.filter(user =>
+        user.id !== currentUser.id &&
+        !currentUser.friends.includes(user.id) &&
+        !user.friendRequests.includes(currentUser.id) &&
+        !user.isBlocked
+    ).sort((a, b) => {
+        const mutualA = a.friends.filter(f => currentUser.friends.includes(f)).length;
+        const mutualB = b.friends.filter(f => currentUser.friends.includes(f)).length;
+
+        return mutualB - mutualA;
+    }).slice(0, 10);
+
     return (
         <div className="feed-page">
             <h1>Wall</h1>
