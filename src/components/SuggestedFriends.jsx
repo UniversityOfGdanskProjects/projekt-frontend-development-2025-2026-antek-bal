@@ -20,7 +20,7 @@ const SuggestionItem = ({user, onDelete}) => {
 
     return (
         <div className="suggested-friend">
-            <p className="delete-suggestion" onClick={() => onDelete(user.id)}>×</p>
+            <p className="delete-suggestion" onClick={() => onDelete(user.id)}>x</p>
 
             <div className="info-box">
                 <Link to={`/profile/${user.id}`}>
@@ -60,7 +60,7 @@ function SuggestedFriend ({friends}) {
         setVisibleSuggestions(friends);
     }, [friends]);
 
-    const handleDismiss = (userId) => {
+    const handleDelete = (userId) => {
         setVisibleSuggestions(prev => prev.filter(u => u.id !== userId));
     };
 
@@ -73,10 +73,12 @@ function SuggestedFriend ({friends}) {
                     <SuggestionItem
                         key={f.id}
                         user={f}
-                        onDismiss={handleDismiss}
+                        onDelete={handleDelete}
                     />
                 ))}
             </div>
         </div>
     )
 }
+
+export default SuggestedFriend;

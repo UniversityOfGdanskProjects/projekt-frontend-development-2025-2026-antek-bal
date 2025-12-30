@@ -2,6 +2,7 @@ import {useMemo} from 'react'
 
 import PostCard from "../components/PostCard"
 import PostForm from "../components/PostForm"
+import SuggestedFriends from "../components/SuggestedFriends"
 
 import { useAuth } from "../context/AuthContext.jsx"
 import { usePosts } from "../context/PostContext.jsx"
@@ -66,31 +67,38 @@ function Feed() {
         <div className="feed-page">
             <h1>Wall</h1>
 
-            {currentUser && (
-                <PostForm onAddPost={handleAddPost}/>
-            )}
+            <div className="feed-layout">
+                <div className="feed-main">
+                    {currentUser && (
+                        <PostForm onAddPost={handleAddPost}/>
+                    )}
 
-            <div className="feed-posts">
-                {postsToDisplay.length > 0 ? (
-                    postsToDisplay.map((post) => {
-                        const author = allUsers.find(u => u.id === post.author);
-                        if (!author) return null;
+                    <div className="feed-posts">
+                        {postsToDisplay.length > 0 ? (
+                            postsToDisplay.map((post) => {
+                                const author = allUsers.find(u => u.id === post.author);
+                                if (!author) return null;
 
-                        return (
-                            <PostCard
-                                key={post.id}
-                                post={post}
-                                author={author}
-                                onToggleLike={handleToggleLike}
-                                onAddComment={handleAddComment}
-                                onDeleteComment={deleteComment}
-                                onDeletePost={deletePost}
-                            />
-                        )
-                    })
-                ) : (
-                    <div className="no-posts">No posts to show</div>
-                )}
+                                return (
+                                    <PostCard
+                                        key={post.id}
+                                        post={post}
+                                        author={author}
+                                        onToggleLike={handleToggleLike}
+                                        onAddComment={handleAddComment}
+                                        onDeleteComment={deleteComment}
+                                        onDeletePost={deletePost}
+                                    />
+                                )
+                            })
+                        ) : (
+                            <div className="no-posts">No posts to show</div>
+                        )}
+                    </div>
+                </div>
+                <div className="feed-sidebar">
+                    <SuggestedFriends friends={suggestedFriends} />
+                </div>
             </div>
         </div>
     );
