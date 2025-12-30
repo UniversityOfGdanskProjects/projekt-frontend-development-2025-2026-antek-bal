@@ -100,4 +100,16 @@ const posts = [
     }
 ]
 
-export {users, posts};
+const events = [
+    {
+        "id": 1,
+        "organizer": 1,
+        "title": "Opener Festival",
+        "description": "Open’er Festival is one of Europe’s largest music festivals, held annually in Gdynia, Poland. It brings together world-class artists, diverse music genres, and a unique summer atmosphere by the seaside.",
+        "date": "2026-07-03T14:00",
+        "location": "Gdynia, Poland",
+        "participants": [1, 3]
+    }
+]
+
+export {users, posts, events};
