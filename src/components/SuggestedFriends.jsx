@@ -1,6 +1,7 @@
 import {useState, useEffect} from "react";
-import Link from "react-router-dom";
+import {Link} from "react-router-dom";
 import {useAuth} from "../context/AuthContext.jsx";
+import "./SuggestedFriends.scss"
 
 const SuggestionItem = ({user, onDelete}) => {
     const { sendFriendRequest, toggleFollow, currentUser } = useAuth();
