@@ -240,6 +240,12 @@
       &:hover {
         text-decoration: underline;
       }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        text-decoration: none;
+      }
     }
   }
 }

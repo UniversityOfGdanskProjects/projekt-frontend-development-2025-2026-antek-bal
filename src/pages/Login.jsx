@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
-import {FaImage} from "react-icons/fa"
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 import { useAuth } from "../context/AuthContext.jsx"
 import "./Login.scss"
@@ -11,12 +11,12 @@ function Login() {
     const {login, register} = useAuth();
 
     const [isLoginView, setIsLoginView] = useState(true);
-
+    const [showPassword, setShowPassword] = useState(false);
+    const [errors, setErrors] = useState({});
     const [loginData, setLoginData] = useState({
         username: "",
         password: "",
     });
-
     const [registerData, setRegisterData] = useState({
         username: "",
         password: "",
@@ -24,17 +24,29 @@ function Login() {
         surname: "",
         avatar: ""
     })
-
     const [preview, setPreview] = useState(null)
+
+    const clearError = (fieldName) => {
+        if (errors[fieldName] || errors.general) {
+            setErrors(prev => {
+                const newErrors = { ...prev };
+                delete newErrors[fieldName];
+                delete newErrors.general;
+                return newErrors;
+            });
+        }
+    }
 
     const handleLoginChange = (e) => {
         const {name, value} = e.target;
         setLoginData(prev => ({ ...prev, [name]: value }));
+        clearError(name);
     }
 
     const handleRegisterChange = (e) => {
         const {name, value} = e.target;
         setRegisterData(prev => ({ ...prev, [name]: value }));
+        clearError(name);
     }
 
     const handleImageChange = (e) => {
@@ -56,11 +68,21 @@ function Login() {
 
     const onLoginSubmit = (e) => {
         e.preventDefault();
-        const success = login(loginData.username, loginData.password);
-        if (success) {
+
+        const newErrors = {};
+        if (!loginData.username.trim()) newErrors.username = "Username is required";
+        if (!loginData.password) newErrors.password = "Password is required";
+
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+            return;
+        }
+
+        const result = login(loginData.username, loginData.password);
+        if (result.success) {
             handleSuccess();
         } else {
-            alert("Invalid credentials!");
+            setErrors({ general: result.error });
         }
     };
 
@@ -68,8 +90,21 @@ function Login() {
         e.preventDefault();
         const { username, password, name, surname, avatar } = registerData;
 
-        if (!username || !password || !name || !surname) {
-            alert("Complete all required fields");
+        const newErrors = {};
+        if (!name.trim()) newErrors.name = "First name required";
+        if (!surname.trim()) newErrors.surname = "Last name required";
+        if (!username.trim()) newErrors.username = "Username required";
+
+        if (!password) newErrors.password = "Password required";
+        else if (password.length < 12) newErrors.password = "Password must be at least 12 characters long";
+        else if (password.toLowerCase() === password) newErrors.password = "Password must contain uppercase characters"
+        else if (password.toUpperCase() === password) newErrors.password = "Password must contain lowercase characters"
+        else if (!password.split('').some(char => ("0123456789").includes(char))) newErrors.password = "Password must contain number"
+        else if (!password.split('').some( char => ("!@#$%^&*()_+-=[]{}|;':\",./<>?").includes(char))) newErrors.password = "Password must contain special character"
+
+
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
             return;
         }
 
@@ -77,72 +112,124 @@ function Login() {
         if (success) {
             handleSuccess();
         } else {
-            alert("This username is already in use!");
+            setErrors({ username: "This username is already taken" });
         }
     };
+
+    const toggleView = (view) => {
+        setIsLoginView(view);
+        setErrors({});
+        setShowPassword(false);
+        setLoginData({ username: "", password: "" });
+        setRegisterData({ username: "", password: "", name: "", surname: "", avatar: "" });
+        setPreview(null);
+    }
 
     return (
         <div className="login-page">
             <div className="card">
                 <div className="card-header">
-                    <h1>{isLoginView ? "Welcome Back" : "Create Account"}</h1>
-                    <p>
-                        {isLoginView
-                            ? "Enter your details to login"
-                            : "Fill in the form to get started"}
-                    </p>
+                    {isLoginView ? (
+                        <>
+                            <h1>Welcome Back!</h1>
+                            <p>Enter your details to login</p>
+                        </>
+                    ) : (
+                        <>
+                            <h1>Create Account</h1>
+                            <p>Fill in the form to get started</p>
+                        </>
+                    )}
                 </div>
+
+                {errors.general && <div className="general-error">{errors.general}</div>}
 
                 {isLoginView ? (
                     <form onSubmit={onLoginSubmit} className="auth-form">
-                        <input
-                            type="text"
-                            name="username"
-                            placeholder="Username"
-                            value={loginData.username}
-                            onChange={handleLoginChange}
-                        />
-                        <input
-                            type="password"
-                            name="password"
-                            placeholder="Password"
-                            value={loginData.password}
-                            onChange={handleLoginChange}
-                        />
+                        <div className="form-group">
+                            <input
+                                type="text"
+                                name="username"
+                                placeholder="Username"
+                                value={loginData.username}
+                                onChange={handleLoginChange}
+                                className={errors.username ? "input-error" : ""}
+                            />
+                            {errors.username && <span className="error-text">{errors.username}</span>}
+                        </div>
+                        <div className="form-group">
+                            <div className="password-group">
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    name="password"
+                                    placeholder="Password"
+                                    value={loginData.password}
+                                    onChange={handleLoginChange}
+                                    className={errors.password ? "input-error" : ""}
+                                />
+                                <span className="password-toggle-icon" onClick={() => setShowPassword(!showPassword)}>
+                                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                                </span>
+                            </div>
+
+                            {errors.password && <span className="error-text">{errors.password}</span>}
+                        </div>
+
                         <button type="submit">Login</button>
                     </form>
                 ) : (
                     <form onSubmit={onRegisterSubmit} className="auth-form">
                         <div className="row">
-                            <input
-                                type="text"
-                                name="name"
-                                placeholder="First Name"
-                                value={registerData.name}
-                                onChange={handleRegisterChange}
-                            />
-                            <input
-                                type="text"
-                                name="surname"
-                                placeholder="Last Name"
-                                value={registerData.surname}
-                                onChange={handleRegisterChange}
-                            />
+                            <div className="form-group">
+                                <input
+                                    type="text"
+                                    name="name"
+                                    placeholder="First Name"
+                                    value={registerData.name}
+                                    onChange={handleRegisterChange}
+                                    className={errors.name ? "input-error" : ""}
+                                />
+                                {errors.name && <span className="error-text">{errors.name}</span>}
+                            </div>
+                            <div className="form-group">
+                                <input
+                                    type="text"
+                                    name="surname"
+                                    placeholder="Last Name"
+                                    value={registerData.surname}
+                                    onChange={handleRegisterChange}
+                                    className={errors.surname ? "input-error" : ""}
+                                />
+                                {errors.surname && <span className="error-text">{errors.surname}</span>}
+                            </div>
                         </div>
-                        <input
-                            type="text"
-                            name="username"
-                            placeholder="Username"
-                            value={registerData.username}
-                            onChange={handleRegisterChange}
-                        />
-                        <input
-                            type="password"
-                            name="password"
-                            placeholder="Password"
-                            value={registerData.password}
-                            onChange={handleRegisterChange}
-                        />
+                        <div className="form-group">
+                            <input
+                                type="text"
+                                name="username"
+                                placeholder="Username"
+                                value={registerData.username}
+                                onChange={handleRegisterChange}
+                                className={errors.username ? "input-error" : ""}
+                            />
+                            {errors.username && <span className="error-text">{errors.username}</span>}
+                        </div>
+                        <div className="form-group">
+                            <div className="password-group">
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    name="password"
+                                    placeholder="Password"
+                                    value={registerData.password}
+                                    onChange={handleRegisterChange}
+                                    className={errors.password ? "input-error" : ""}
+                                />
+                                <span className="password-toggle-icon" onClick={() => setShowPassword(!showPassword)}>
+                                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                                </span>
+                            </div>
+                            {errors.password && <span className="error-text">{errors.password}</span>}
+                        </div>
 
                         <div className="file-input-container">
                             {preview && <img src={preview} alt="Preview" className="avatar-preview" />}
