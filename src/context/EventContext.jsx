@@ -17,21 +17,35 @@ export const EventProvider = ({children}) => {
     }
 
     const joinEvent = (eventId, userId) => {
-        const targetEvent = allEvents.find((event) => event.id === eventId);
-        const newEvent = targetEvent.participants.push(userId)
+        setAllEvents(prevEvents => prevEvents.map(event => {
+            if (event.id === eventId) {
+                if (event.participants.includes(userId)) return event;
 
-        setAllEvents(prevEvents => [...prevEvents, newEvent]);
+                return {
+                    ...event,
+                    participants: [...event.participants, userId]
+                };
+            }
+            return event;
+        }));
     }
 
     const leaveEvent = (eventId, userId) => {
-        const targetEvent = allEvents.find((event) => event.id === eventId);
-        const newEvent = targetEvent.participants.remove(userId)
+        setAllEvents(prevEvents => prevEvents.map(event => {
+            if (event.id === eventId) {
+                if (!event.participants.includes(userId)) return event;
 
-        setAllEvents(prevEvents => [...prevEvents, newEvent]);
+                return {
+                    ...event,
+                    participants: event.participants.filter(id => id !== userId)
+                };
+            }
+            return event;
+        }));
     }
 
     const deleteEvent = (eventId) => {
-        const targetEvent = allEvents.find((event) => event.id === eventId);
+        setAllEvents(prevEvents => prevEvents.filter(event => event.id !== eventId));
     }
 
     const value = {
@@ -41,4 +55,12 @@ export const EventProvider = ({children}) => {
         leaveEvent,
         deleteEvent
     }
+
+    return (
+        <EventContext.Provider value={value}>
+            {children}
+        </EventContext.Provider>
+    );
 };
+
+export const useEvents = () => useContext(EventContext);
