@@ -177,6 +177,8 @@ function Navbar() {
                             )}
                         </li>
 
+                        <li><Link to="/events">Events</Link></li>
+
                         <li><Link to={`/profile/${currentUser.id}`}>Profile</Link></li>
                         <li><button onClick={logout}>Logout</button></li>
                     </>

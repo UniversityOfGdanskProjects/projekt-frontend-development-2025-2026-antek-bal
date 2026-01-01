@@ -1,0 +1,119 @@
+@import "../styles/variables";
+
+.create-event-card {
+  background-color: $surface-color;
+  border-radius: $border-radius;
+  padding: $spacing-md;
+  box-shadow: $shadow-sm;
+  margin-bottom: 30px;
+
+  .form-header {
+    display: flex;
+    gap: 15px;
+
+    .avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid $primary-color;
+    }
+
+    .form-content {
+      flex: 1;
+
+      h3 {
+        margin-top: 0;
+        margin-bottom: 15px;
+        color: $text-main;
+        font-size: 1.1rem;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+
+        input, textarea {
+          background-color: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 6px;
+          padding: 10px;
+          color: $text-main;
+          font-family: inherit;
+          font-size: 0.95rem;
+
+          &:focus {
+            outline: none;
+            border-color: $primary-color;
+            background-color: rgba(255, 255, 255, 0.1);
+          }
+        }
+
+        .input-title {
+          font-weight: bold;
+          font-size: 1rem;
+        }
+
+        .row {
+          display: flex;
+          gap: 10px;
+
+          .input-group {
+            flex: 1;
+            position: relative;
+
+            .icon {
+              position: absolute;
+              left: 10px;
+              top: 50%;
+              transform: translateY(-50%);
+              color: $text-secondary;
+              z-index: 1;
+            }
+
+            input {
+              width: 100%;
+              padding-left: 32px;
+
+              &::-webkit-calendar-picker-indicator {
+                filter: invert(1);
+                cursor: pointer;
+              }
+            }
+          }
+        }
+
+        textarea {
+          resize: vertical;
+          min-height: 80px;
+        }
+
+        .form-actions {
+          display: flex;
+          justify-content: flex-end;
+
+          button {
+            background-color: $primary-color;
+            color: #000;
+            font-weight: bold;
+            border: none;
+            padding: 8px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+
+            &:disabled {
+              opacity: 0.5;
+              cursor: not-allowed;
+            }
+
+            &:hover:not(:disabled) {
+              opacity: 0.9;
+            }
+          }
+        }
+      }
+    }
+  }
+}

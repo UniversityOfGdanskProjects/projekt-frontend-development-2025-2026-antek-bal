@@ -1,10 +1,11 @@
 import {createContext, useContext} from "react";
 import useLocalStorage from "../hooks/useLocalStorage.jsx";
+import { events as initialEvents } from "../data/mockData.js";
 
 const EventContext = createContext(null);
 
 export const EventProvider = ({children}) => {
-    const [allEvents, setAllEvents] = useLocalStorage("events", []);
+    const [allEvents, setAllEvents] = useLocalStorage("events", initialEvents);
 
     const createEvent = (eventData) => {
         const newEvent = {

@@ -55,7 +55,7 @@ function Login() {
             const reader = new FileReader();
             reader.onloadend = () => {
                 setPreview(reader.result);
-                setRegisterData(prev => ({ ...prev, [name]: reader.result }));
+                setRegisterData(prev => ({ ...prev, avatar: reader.result }));
             }
             reader.readAsDataURL(file);
         }
