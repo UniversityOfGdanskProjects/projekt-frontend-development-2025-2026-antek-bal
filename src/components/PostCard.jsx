@@ -12,7 +12,7 @@ const CommentItem = ({ comment, index, allUsers, currentUser, onDelete, postId})
 
     if (!user) return null;
 
-    const canDelete = currentUser?.id === user.id || currentUser?.role === "admin"
+    const canDelete = currentUser.id === user.id || currentUser.role === "admin"
 
     return (
         <div className="comment-item">

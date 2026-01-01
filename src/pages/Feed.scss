@@ -23,6 +23,15 @@
       flex: 1;
       min-width: 0;
 
+      .infinite-scroll {
+        overflow: visible;
+
+        h4{
+          text-align: center;
+          color: #888;
+        }
+      }
+
       .feed-posts {
         display: flex;
         flex-direction: column;

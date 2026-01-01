@@ -1,4 +1,5 @@
-import {useMemo} from 'react'
+import {useMemo, useState} from 'react'
+import InfiniteScroll from "react-infinite-scroll-component";
 
 import PostCard from "../components/PostCard"
 import PostForm from "../components/PostForm"
@@ -14,7 +15,10 @@ function Feed() {
     const {currentUser, allUsers, sendNotification} = useAuth();
     const { allPosts, addPost, deletePost, toggleLike, addComment, deleteComment } = usePosts();
 
-    const postsToDisplay = useMemo(() => {
+    const [page, setPage] = useState(1);
+    const max_posts = 5;
+
+    const filteredPosts = useMemo(() => {
         return allPosts
             .filter(post => {
                 const author = allUsers.find(u => u.id === post.author);
@@ -23,13 +27,23 @@ function Feed() {
 
                 if (post.visibility === "public") return true;
                 if (post.visibility === "friends") {
-                    return currentUser?.friends?.includes(post.author);
+                    return currentUser.friends.includes(post.author);
                 }
 
                 return false;
             })
             .sort((a, b) => new Date(b.date) - new Date(a.date));
     }, [allPosts, allUsers, currentUser]);
+
+    const postsToDisplay = useMemo(() => {
+        return filteredPosts.slice(0, page * max_posts);
+    }, [filteredPosts, page])
+
+    const fetchMoreData = () => {
+        setPage(prev => prev + 1);
+    };
+
+    const hasMore = postsToDisplay.length < filteredPosts.length;
 
     const handleAddPost = (newPost) => {
         const postDefaults = {...newPost, likedBy: [], comments: []};
@@ -73,28 +87,36 @@ function Feed() {
                         <PostForm onAddPost={handleAddPost}/>
                     )}
 
-                    <div className="feed-posts">
-                        {postsToDisplay.length > 0 ? (
-                            postsToDisplay.map((post) => {
-                                const author = allUsers.find(u => u.id === post.author);
-                                if (!author) return null;
+                    <InfiniteScroll
+                        dataLength={postsToDisplay.length}
+                        next={fetchMoreData}
+                        hasMore={hasMore}
+                        loader={<h4>Loading...</h4>}
+                        className="infinite-scroll"
+                    >
+                        <div className="feed-posts">
+                            {postsToDisplay.length > 0 ? (
+                                postsToDisplay.map((post) => {
+                                    const author = allUsers.find(u => u.id === post.author);
+                                    if (!author) return null;
 
-                                return (
-                                    <PostCard
-                                        key={post.id}
-                                        post={post}
-                                        author={author}
-                                        onToggleLike={handleToggleLike}
-                                        onAddComment={handleAddComment}
-                                        onDeleteComment={deleteComment}
-                                        onDeletePost={deletePost}
-                                    />
-                                )
-                            })
-                        ) : (
+                                    return (
+                                        <PostCard
+                                            key={post.id}
+                                            post={post}
+                                            author={author}
+                                            onToggleLike={handleToggleLike}
+                                            onAddComment={handleAddComment}
+                                            onDeleteComment={deleteComment}
+                                            onDeletePost={deletePost}
+                                        />
+                                    )
+                                })
+                            ) : (
                             <div className="no-posts">No posts to show</div>
-                        )}
-                    </div>
+                            )}
+                        </div>
+                    </InfiniteScroll>
                 </div>
                 <div className="feed-sidebar">
                     <SuggestedFriends friends={suggestedFriends} />

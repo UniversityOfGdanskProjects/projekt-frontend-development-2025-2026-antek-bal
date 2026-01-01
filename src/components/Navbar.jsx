@@ -117,7 +117,7 @@ function Navbar() {
     const handleOpenUnreadChats = () => {
         const unreadSenders = new Set(
                 messages
-                    .filter(msg => msg.receiverId === currentUser?.id && !msg.isRead)
+                    .filter(msg => msg.receiverId === currentUser.id && !msg.isRead)
                     .map(msg => msg.senderId)
         )
         unreadSenders.forEach(senderId => openChat(senderId));

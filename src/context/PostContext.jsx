@@ -40,7 +40,7 @@ export const PostProvider = ({ children }) => {
                 if (post.author !== currentUser.id && sendNotification) {
                     sendNotification(
                         post.author,
-                        `${currentUser.name} liked your post!`,
+                        `${currentUser.name} liked your post`,
                         "like",
                         post.id
                     );
