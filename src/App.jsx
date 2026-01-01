@@ -13,6 +13,8 @@ import AdminPanel from "./pages/AdminPanel.jsx"
 import { AuthProvider } from "./context/AuthContext.jsx"
 import { ChatProvider } from "./context/ChatContext.jsx"
 import { PostProvider } from "./context/PostContext.jsx"
+import {EventProvider} from "./context/EventContext.jsx";
+import Events from "./pages/Events.jsx";
 
 
 
@@ -21,27 +23,34 @@ function App() {
         <AuthProvider>
             <PostProvider>
                 <ChatProvider>
-                    <Layout>
-                        <Routes>
-                            <Route path="/" element={
-                                <ProtectedRoute>
-                                    <Feed/>
-                                </ProtectedRoute>
-                            }></Route>
-                            <Route path="/login" element={<Login/>}/>
-                            <Route path="/profile/:userId" element={
-                                <ProtectedRoute>
-                                    <Profile/>
-                                </ProtectedRoute>
-                            }></Route>
-                            <Route path="/admin" element={
-                                <AdminRoute>
-                                    <AdminPanel/>
-                                </AdminRoute>
-                            }></Route>
-                        </Routes>
-                    </Layout>
-                    <ChatDock/>
+                    <EventProvider>
+                        <Layout>
+                            <Routes>
+                                <Route path="/" element={
+                                    <ProtectedRoute>
+                                        <Feed/>
+                                    </ProtectedRoute>
+                                }></Route>
+                                <Route path="/login" element={<Login/>}/>
+                                <Route path="/profile/:userId" element={
+                                    <ProtectedRoute>
+                                        <Profile/>
+                                    </ProtectedRoute>
+                                }></Route>
+                                <Route path="/admin" element={
+                                    <AdminRoute>
+                                        <AdminPanel/>
+                                    </AdminRoute>
+                                }></Route>
+                                <Route path="/events" element={
+                                    <ProtectedRoute>
+                                        <Events/>
+                                    </ProtectedRoute>
+                                }></Route>
+                            </Routes>
+                        </Layout>
+                        <ChatDock/>
+                    </EventProvider>
                 </ChatProvider>
             </PostProvider>
         </AuthProvider>
