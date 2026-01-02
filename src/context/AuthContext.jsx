@@ -91,8 +91,8 @@ export const AuthProvider = ({children}) => {
         if (!currentUser) return;
         const targetUser = allUsers.find(u => u.id === targetUserId);
 
-        if (targetUser?.friendRequests?.includes(currentUser.id) ||
-            targetUser?.friends?.includes(currentUser.id)) return;
+        if (targetUser.friendRequests.includes(currentUser.id) ||
+            targetUser.friends.includes(currentUser.id)) return;
 
         userUpdate(user => {
             if (user.id === targetUserId) {
@@ -102,7 +102,7 @@ export const AuthProvider = ({children}) => {
             return user;
         });
 
-        sendNotification(targetUserId, `${currentUser.name} ${currentUser.surname} sent you a friend request!`, "friend", currentUser.id)
+        sendNotification(targetUserId, `${currentUser.name} ${currentUser.surname} sent you a friend request`, "friend", currentUser.id)
     };
 
     const acceptFriendRequest = (senderId) => {

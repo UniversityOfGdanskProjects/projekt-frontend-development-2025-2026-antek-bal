@@ -62,7 +62,7 @@ function Login() {
     };
 
     const handleSuccess = () => {
-        const from = location.state?.from?.pathname || "/";
+        const from = location.state.from.pathname || "/";
         navigate(from, {replace: true});
     }
 

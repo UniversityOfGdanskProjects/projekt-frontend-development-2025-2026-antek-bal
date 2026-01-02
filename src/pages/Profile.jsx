@@ -86,10 +86,10 @@ function Profile() {
 
         return {
             isMe: currentUser.id === profileUser.id,
-            isFriend: currentUser.friends?.includes(profileUser.id),
-            hasSentRequest: profileUser.friendRequests?.includes(currentUser.id),
-            hasReceivedRequest: currentUser.friendRequests?.includes(profileUser.id),
-            isFollowing: currentUser.following?.includes(profileUser.id)
+            isFriend: currentUser.friends.includes(profileUser.id),
+            hasSentRequest: profileUser.friendRequests.includes(currentUser.id),
+            hasReceivedRequest: currentUser.friendRequests.includes(profileUser.id),
+            isFollowing: currentUser.following.includes(profileUser.id)
         };
     }, [currentUser, profileUser]);
 
