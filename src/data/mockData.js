@@ -24,8 +24,8 @@ const getRandomDate = (start, end) => new Date(start.getTime() + Math.random() *
 
 const users = Array.from({ length: 50 }, (_, i) => {
     const id = i + 1;
-    const name = getRandom(firstNames);
-    const surname = getRandom(lastNames);
+    const name = id === 1 ? "John" : getRandom(firstNames);
+    const surname = id === 1 ? "Doe" : getRandom(lastNames);
     const username = `${name.toLowerCase()}_${surname.toLowerCase()}${id}`;
 
     const friendsCount = getRandomInt(0, 5);
@@ -47,7 +47,7 @@ const users = Array.from({ length: 50 }, (_, i) => {
         "following": friends,
         "friendRequests": [],
         "role": id === 1 ? "admin" : "user",
-        "isBlocked": i > 45
+        "isBlocked": false
     };
 });
 
