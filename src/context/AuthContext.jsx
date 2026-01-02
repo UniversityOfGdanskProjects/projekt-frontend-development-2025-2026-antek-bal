@@ -163,6 +163,22 @@ export const AuthProvider = ({children}) => {
         })
     }
 
+    const deleteAccount = () => {
+        if (!currentUser) return;
+
+        const cleanedUsers = allUsers.map(user => ({
+            ...user,
+            friends: user.friends.filter(id => id !== currentUser.id),
+            followers: user.followers.filter(id => id !== currentUser.id),
+            following: user.following.filter(id => id !== currentUser.id),
+            friendRequests: user.friendRequests.filter(id => id !== currentUser.id),
+        }))
+            .filter(u => u.id !== currentUser.id);
+
+        updateUsers(cleanedUsers);
+        logout();
+    };
+
     const toggleBlockUser = (userId) => {
         userUpdate(user => {
             if (user.id === userId) {
@@ -207,6 +223,7 @@ export const AuthProvider = ({children}) => {
         declineFriendRequest,
         removeFriend,
         updateProfile,
+        deleteAccount,
         toggleBlockUser,
     }
 

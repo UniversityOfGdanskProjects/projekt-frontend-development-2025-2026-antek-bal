@@ -4,7 +4,7 @@ import {useAuth} from "../context/AuthContext.jsx"
 import "./EditProfile.scss"
 
 function EditProfile({onClose}) {
-    const {currentUser, updateProfile} = useAuth();
+    const {currentUser, updateProfile, deleteAccount} = useAuth();
     const navigate = useNavigate();
 
     const [step, setStep] = useState(1);
@@ -45,6 +45,13 @@ function EditProfile({onClose}) {
 
         if (onClose) onClose()
         navigate(`/profile/${currentUser.id}`);
+    };
+
+    const handleDeleteClick = () => {
+        if (window.confirm("Are you sure you want to delete your account?")) {
+            deleteAccount();
+            navigate("/login");
+        }
     };
 
     const renderStepContent = () => {
@@ -110,6 +117,12 @@ function EditProfile({onClose}) {
                                 onChange={handleChange}
                             />
                         </form>
+                        <div className="delete-zone">
+                            <p>Danger Zone</p>
+                            <button type="button" className="delete-account-btn" onClick={handleDeleteClick}>
+                                Delete My Account
+                            </button>
+                        </div>
                     </div>
                 )
             default:
