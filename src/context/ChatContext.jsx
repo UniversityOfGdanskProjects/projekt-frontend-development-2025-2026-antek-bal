@@ -29,7 +29,7 @@ export const ChatProvider = ({children}) => {
                     id: Date.now(),
                     senderId: randomFriend.id,
                     receiverId: currentUser.id,
-                    content: `Hi friend! It's ${randomFriend.name}. (${new Date().toLocaleTimeString()})`,
+                    content: `Hi! (${new Date().toLocaleTimeString()})`,
                     timestamp: new Date().toISOString(),
                     isRead: false
                 };
