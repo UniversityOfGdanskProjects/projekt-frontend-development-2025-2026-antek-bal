@@ -48,10 +48,8 @@ function EditProfile({onClose}) {
     };
 
     const handleDeleteClick = () => {
-        if (window.confirm("Are you sure you want to delete your account?")) {
-            deleteAccount();
-            navigate("/login");
-        }
+        deleteAccount();
+        navigate("/login");
     };
 
     const renderStepContent = () => {
@@ -118,7 +116,6 @@ function EditProfile({onClose}) {
                             />
                         </form>
                         <div className="delete-zone">
-                            <p>Danger Zone</p>
                             <button type="button" className="delete-account-btn" onClick={handleDeleteClick}>
                                 Delete My Account
                             </button>
